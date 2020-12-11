@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:url" content="http://example.com/page/2/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="John Doe">
@@ -152,213 +152,40 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-phbase学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-haproxy" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/11/phbase%E5%AD%A6%E4%B9%A0/">phbase学习</a>
+      <a class="article-title" href="/2020/01/31/haproxy/">Haproxy</a>
     </h1>
   
 
         
-        <a href="/2020/12/11/phbase%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2020-12-11T11:59:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-11</time>
+        <a href="/2020/01/31/haproxy/" class="archive-article-date">
+  	<time datetime="2020-01-30T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
-      
+        <h6 id=""><a href="#" class="headerlink" title=""></a></h6><ol>
+<li>[cc lang=”java”]yum install haproxy</li>
+</ol>
+<p>vi /etc/haproxy/haproxy.cfg</p>
+<p>haproxy -f /etc/haproxy/haproxy.cfg </p>
+<p>systemctl restart haproxy[/cc]</p>
+<ol start="2">
+<li>[cc lang=”java”]<br>global<pre><code> daemon</code></pre>
+</li>
+</ol>
+<p>defaults<br>        mode    tcp<br>        retries 2<br>        option  redispatch<br>        option  abortonclose<br>        maxconn 4096<br>        timeout connect 5s<br>        timeout client 15m<br>        timeout server 15m</p>
+<p>#上面两段不用动，只修改下面一段的aaa-规则名、7777-监听端口、x.x.x.x:xx-目的ip端口，即可实现端口流量转发</p>
+<p>listen aaa<br>        bind *:7777<br>        mode tcp<br>        tcp-request inspect-delay 5s<br>        default-server inter 3s rise 2 fall 3<br>        server srv01 x.x.x.x:xx weight 10 check[/cc]</p>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/11/phbase%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-单测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/11/%E5%8D%95%E6%B5%8B/">单测</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/11/%E5%8D%95%E6%B5%8B/" class="archive-article-date">
-  	<time datetime="2020-12-11T11:53:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/11/%E5%8D%95%E6%B5%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-logrotate" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/11/logrotate/">logrotate</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/11/logrotate/" class="archive-article-date">
-  	<time datetime="2020-12-11T11:52:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/11/logrotate/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-aop-intercepter-filter-区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/17/aop-intercepter-filter-%E5%8C%BA%E5%88%AB/">aop intercepter filter 区别</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/17/aop-intercepter-filter-%E5%8C%BA%E5%88%AB/" class="archive-article-date">
-  	<time datetime="2020-03-16T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
       
 
       
@@ -381,7 +208,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/17/aop-intercepter-filter-%E5%8C%BA%E5%88%AB/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/01/31/haproxy/">展开全文 >></a>
         </p>
       
 
@@ -411,36 +238,39 @@
 
 
   
-    <article id="post-elasticsearch的工作流程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-根据域名查ip的集中方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/13/elasticsearch%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/">Elasticsearch的工作流程</a>
+      <a class="article-title" href="/2020/01/31/%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E6%9F%A5ip%E7%9A%84%E9%9B%86%E4%B8%AD%E6%96%B9%E6%B3%95/">ip-域名互查的几种方法</a>
     </h1>
   
 
         
-        <a href="/2020/03/13/elasticsearch%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" class="archive-article-date">
-  	<time datetime="2020-03-12T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-13</time>
+        <a href="/2020/01/31/%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E6%9F%A5ip%E7%9A%84%E9%9B%86%E4%B8%AD%E6%96%B9%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2020-01-30T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>为什么用es？es倒排快</p>
-<p>正排: 文档id到内容、单词的关联<br>倒排: 单词到文档id的关联</p>
-<p>全文检索：先创建索引，然后根据索引来进行搜索的过程。</p>
-<p>全文检索的流程：索引流程、搜索流程<br>索引流程：采集数据 -&gt; 文档处理 -&gt; 存储到索引库中<br>搜索流程：输入查询条件 -&gt; 通过lucene的查询器查询索引 -&gt; 从索引库中取出结 -&gt; 视图渲染（Lucene本身不能进行视图渲染）</p>
-<p>elasticsearch 工作的一般流程：</p>
-<ol>
-<li>采集数据—&gt;构建文档对象—&gt;创建索引(将文档写入索引库采集数据，将数据转换成Lucene文档，将文档写入索引库，分词，创建索引)</li>
-<li>查询，先倒排索引，获取文档id</li>
-<li>再通过文档id正排索引，找到完整内容</li>
-<li>返回结果</li>
+        <h4 id="根据域名查ip"><a href="#根据域名查ip" class="headerlink" title="根据域名查ip:"></a>根据域名查ip:</h4><h6 id=""><a href="#" class="headerlink" title=""></a></h6><ol>
+<li><p>ping <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a></p>
+</li>
+<li><p>nslookup，回车后输入域名</p>
+</li>
+<li><p>dig <a href="http://www.baidu.com，可以查到A记录，A记录即最常见的dns记录类型，[dig详解](https://www.imooc.com/article/26971?block_id=tuijian_wz)">www.baidu.com，可以查到A记录，A记录即最常见的dns记录类型，[dig详解](https://www.imooc.com/article/26971?block_id=tuijian_wz)</a><br>若想只看ip信息，可以 dig <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> +short</p>
+</li>
+</ol>
+<h4 id="根据ip查域名"><a href="#根据ip查域名" class="headerlink" title="根据ip查域名:"></a>根据ip查域名:</h4><h6 id="-1"><a href="#-1" class="headerlink" title=""></a></h6><ol>
+<li><p>nslookup，回车后输入ip</p>
+</li>
+<li><p>dig -x ip [+short]</p>
+</li>
 </ol>
 
       
@@ -465,7 +295,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/13/elasticsearch%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/01/31/%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E6%9F%A5ip%E7%9A%84%E9%9B%86%E4%B8%AD%E6%96%B9%E6%B3%95/">展开全文 >></a>
         </p>
       
 
@@ -495,27 +325,30 @@
 
 
   
-    <article id="post-各数据库技术选型的原因" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-虚拟机三种网络模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/13/%E5%90%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%9B%A0/">各数据库技术选型的原因</a>
+      <a class="article-title" href="/2020/01/21/%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/">虚拟机三种网络模式</a>
     </h1>
   
 
         
-        <a href="/2020/03/13/%E5%90%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%9B%A0/" class="archive-article-date">
-  	<time datetime="2020-03-12T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-13</time>
+        <a href="/2020/01/21/%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2020-01-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>数据库: mysql mangodb elasticsearch redis hive hbase<br>ORM框架: hibernate mybatis</p>
+        <h1 id="虚拟机三种网络模式的区别："><a href="#虚拟机三种网络模式的区别：" class="headerlink" title="虚拟机三种网络模式的区别："></a>虚拟机三种网络模式的区别：</h1><h4 id="桥接："><a href="#桥接：" class="headerlink" title="桥接："></a>桥接：</h4><p>宿主机ip为192.168.1.2，虚拟机的ip为192.168.1.3，路由器分发的ip，对外来说相当于局域网内的另外一台机器</p>
+<h4 id="nat：网络地址转换，其实就是流量转发到另一个ip"><a href="#nat：网络地址转换，其实就是流量转发到另一个ip" class="headerlink" title="nat：网络地址转换，其实就是流量转发到另一个ip"></a>nat：网络地址转换，其实就是流量转发到另一个ip</h4><p>宿主机ip为192.168.1.2，虚拟机的ip为192.168.171.2，宿主机维护一张表，记录虚拟网卡每个端口对应哪个虚拟机，虚拟机但是对外通信时经过宿主机的虚拟网卡，展示的ip为192.168.1.2</p>
+<h6 id="snat-更改源地址"><a href="#snat-更改源地址" class="headerlink" title="snat: 更改源地址"></a>snat: 更改源地址</h6><h6 id="dnat-更改目的地址"><a href="#dnat-更改目的地址" class="headerlink" title="dnat: 更改目的地址"></a>dnat: 更改目的地址</h6><h4 id="host-only："><a href="#host-only：" class="headerlink" title="host-only："></a>host-only：</h4><p>跟nat模式相似，但是不能联网，只能与宿主机通信</p>
+<p>同一个局域网内，不同网段的ip是可以通信的，只要不做策略就可以</p>
 
       
 
@@ -539,7 +372,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/13/%E5%90%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%9B%A0/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/01/21/%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/">展开全文 >></a>
         </p>
       
 
@@ -569,67 +402,74 @@
 
 
   
-    <article id="post-http代理与https代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-iptables学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/19/http%E4%BB%A3%E7%90%86%E4%B8%8Ehttps%E4%BB%A3%E7%90%86/">http代理与https代理</a>
+      <a class="article-title" href="/2020/01/10/iptables%E5%AD%A6%E4%B9%A0/">Iptables学习</a>
     </h1>
   
 
         
-        <a href="/2020/02/19/http%E4%BB%A3%E7%90%86%E4%B8%8Ehttps%E4%BB%A3%E7%90%86/" class="archive-article-date">
-  	<time datetime="2020-02-18T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-19</time>
+        <a href="/2020/01/10/iptables%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2020-01-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>HTTP代理是最经典最常见的代理协议。其用途非常广泛，普遍见于公司内网环境，一般员工都需要给浏览器配置一个HTTP代理才能访问互联网。起初，HTTP代理也用来翻越G<em>W，但是因为G</em>W不断发展，普通的HTTP代理早已无效了。但是，基于仍然有不少人使用明文的HTTP代理协议结合 stunnel之类的软件进行加密翻Q，有时这种代理又被称为HTTPS代理。再后来，又出现了WebVpn via Spdy之类的代理协议，特点是Chrome浏览器直接支持。再加上HTTP代理协议可以代理什么？是只能代理HTTP还是也可以代理HTTPS，还是可 以用来实现SOCKS代理？总之，非常混乱。在<a target="_blank" rel="noopener" href="https://github.com/fqrouter/fqsocks">fqsocks</a>项目里用python实现了HTTP代理的各种主流变种，终于明白了不同称谓之后的真正含义。本文试图总结一二。</p>
-<p><strong>代理基础</strong></p>
-<p>所有的代理，其原理都是类似的。其网络拓扑结构都是这样的：</p>
-<pre class="hljs scss"><span class="hljs-selector-attr">[客户端]</span> <-TCP连接-> <span class="hljs-selector-attr">[代理]</span> <-TCP连接-> <span class="hljs-selector-attr">[服务器]</span></pre>
-<p>代理左手拿着与客户端的连接，右手拿着与服务器的连接，然后在两个TCP连接之间做数据的对拷。各种不同的代理协议，不同的只是TCP连接之上跑的 是什么的协议，数据是怎么经过包装，拆包的。不存在客户端与服务器之间建立TCP连接的情况。只有VPN这种在IP包这一层工作的，才能实现客户端与服务 器的之间连接。</p>
-<p><strong>HTTP流量，明文的代理连接</strong></p>
-<p>这是最简单的一种HTTP代理。其工作方式是客户端与代理之间建立的TCP连接是明文的，也就是不经过SSL加密的。在TCP连接中传输的数据就是 明文的HTTP的POST和GET这些。对于这种代理工作方式，客户端发给服务器的包几乎不用修改发给代理，就可以获得几乎与服务器一样的返回。其收发包 过程如下</p>
-<pre class="hljs scss"><span class="hljs-selector-attr">[客户端]</span> -HTTP GET-> <span class="hljs-selector-attr">[代理]</span> -HTTP GET-> <span class="hljs-selector-attr">[服务器]</span>
-<span class="hljs-selector-attr">[客户端]</span> <-200 OK <span class="hljs-selector-attr">[代理]</span> <-200 OK <span class="hljs-selector-attr">[服务器]</span></pre>
-<p><strong>HTTPS流量，**</strong>明文的**<strong>代理连接</strong></p>
-<p>在这种工作方式中，客户端与代理之间建立的TCP连接仍然是明文的，也就是不经过SSL加密的。但是客户端发出的请求不是HTTP请求，而是 HTTPS请求。因为HTTPS请求是经过SSL加密的，所以做为代理来说，虽然客户端与其建立的TCP连接本身没有经过SSL加密，但是中间传输的数据 确是SSL加密的。于是代理就无法通过检查HTTPS请求的内容知道目的服务器是什么。所以客户端必须在发HTTPS请求之前用HTTP CONNECT请求告诉代理要连接的服务器是什么，然后等代理服务器左右手的TCP连接都握稳了，客户端就可以收发HTTPS流量了。代理在其中只是一个 简单的在两个TCP连接中做数据对拷，并不知道客户端与服务器在干什么。事实上，利用HTTP CONNECT，客户端与服务器之间除了可以交换HTTPS的流量，任何流量都是可以的。经过HTTP CONNECT之后，客户端与代理的TCP连接就”相当于”是与服务器之间建立的TCP连接。当然我们前面已经说过了，这种直连只是一个假象。其收发包过 程如下：</p>
-<pre class="hljs cs">[<span class="hljs-meta">客户端</span>] -HTTP CONNECT a.b.c.d:port-> [代理] -TCP SYN-> [服务器]
-[<span class="hljs-meta">客户端</span>] <<span class="hljs-number">-200</span> OK- [代理] <-TCP SYN ACK- [服务器] <span class="hljs-meta"># 这里的200 OK与下面的200 OK的含义不同</span>
-[<span class="hljs-meta">客户端</span>] -SSL CLIENT HELLO-> [代理] -SSL CLIENT HELLO-> [服务器] <span class="hljs-meta"># SSL握手包1</span>
-[<span class="hljs-meta">客户端</span>] <-SSL SERVER HELLO- [代理] <-SSL SERVER HELLO/CERTIFICATE等- [服务器] <span class="hljs-meta"># SSL握手包2</span>
-[<span class="hljs-meta">客户端</span>] -SSL CLIENT CERTIFICATE等-> [代理] -SSL CLIENT CERTIFICATE等-> [服务器] <span class="hljs-meta"># SSL握手包3</span>
-[<span class="hljs-meta">客户端</span>] <-SSL SERVER FINISHED- [代理] <-SSL SERVER FINISHED- [服务器] <span class="hljs-meta"># SSL握手包4</span>
-[<span class="hljs-meta">客户端</span>] -SSL加密的HTTP GET-> [代理] -SSL加密的HTTP GET-> [服务器]
-[<span class="hljs-meta">客户端</span>] <-SSL加密的<span class="hljs-number">200</span> OK- [代理] <-SSL加密的<span class="hljs-number">200</span> OK- [服务器]</pre>
-<p>因为CONNECT之后，这个左右手的TCP连接里跑什么流量，代理是完全不管的，所以这样也是可以的：</p>
-<pre class="hljs css"><span class="hljs-selector-attr">[客户端]</span> <span class="hljs-selector-tag">-HTTP</span> <span class="hljs-selector-tag">CONNECT</span> <span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.b</span><span class="hljs-selector-class">.c</span><span class="hljs-selector-class">.d</span><span class="hljs-selector-pseudo">:port-</span>> <span class="hljs-selector-attr">[代理]</span> <span class="hljs-selector-tag">-TCP</span> <span class="hljs-selector-tag">SYN-</span>> <span class="hljs-selector-attr">[服务器]</span>
-<span class="hljs-selector-attr">[客户端]</span> <<span class="hljs-selector-tag">-200</span> <span class="hljs-selector-tag">OK-</span> <span class="hljs-selector-attr">[代理]</span> <<span class="hljs-selector-tag">-TCP</span> <span class="hljs-selector-tag">SYN</span> <span class="hljs-selector-tag">ACK-</span> <span class="hljs-selector-attr">[服务器]</span> # 这里的200 <span class="hljs-selector-tag">OK</span>与下面的200 <span class="hljs-selector-tag">OK</span>的含义不同
-<span class="hljs-selector-attr">[客户端]</span> <span class="hljs-selector-tag">-any</span> <span class="hljs-selector-tag">request-</span>> <span class="hljs-selector-attr">[代理]</span> <span class="hljs-selector-tag">-any</span> <span class="hljs-selector-tag">request-</span>> <span class="hljs-selector-attr">[服务器]</span>
-<span class="hljs-selector-attr">[客户端]</span> <<span class="hljs-selector-tag">-any</span> <span class="hljs-selector-tag">response-</span> <span class="hljs-selector-attr">[代理]</span> <<span class="hljs-selector-tag">-any</span> <span class="hljs-selector-tag">response-</span> <span class="hljs-selector-attr">[服务器]</span></pre>
-<p>正因为CONNECT之后TCP连接可以用来跑任意的东西，当然也就可以用来再跑另外一个代理协议了，比如SOCKS代理。</p>
-<p>只要SOCKS代理是运行在443这样HTTP CONNECT允许的端口，通过HTTP-CONNECT+SOCKS代理就可以在公司内网里访问HTTP之外的互联网内容了。</p>
-<p><strong>HTTP流量，SSL加密的代理连接</strong></p>
-<p>传统HTTP代理，客户端与代理之间是不经过加密的。因为GFW可以从明文的流量中知道你通过HTTP代理访问的目标服务器，所以可以从中切断连接。为了让HTTP代理协议继续承担翻墙的重任，人们发明一种新的方式。其拓扑结构如下</p>
-<pre class="hljs scss"><span class="hljs-selector-attr">[客户端]</span> <-TCP连接-> <span class="hljs-selector-attr">[Stunnel客户端模式]</span> <-TCP over SSL连接-> <span class="hljs-selector-attr">[Stunnel服务器模式]</span> <-TCP连接-> <span class="hljs-selector-attr">[代理]</span> <-TCP连接-> <span class="hljs-selector-attr">[服务器]</span></pre>
-<p>虽然拓扑结构复杂了，但是概念其实是很简单的。因为客户端与代理都不直接支持SSL的TCP连接，所以通过Stunnel做一个转换，在客户端经过 Stunnel的客户端模式进行加密，然后在代理上有用Stunnel的服务器段模式进行解密。这样GFW夹在中间看到的是经过SSL加密的流量，无法进 行URL关键字过滤了。收发包的过程如下：</p>
-<pre class="hljs scss"><span class="hljs-selector-attr">[客户端]</span> -HTTP GET-> <span class="hljs-selector-attr">[Stunnel客户端模式]</span> -SSL加密的HTTP GET-> <span class="hljs-selector-attr">[Stunnel服务器模式]</span> -HTTP GET-> <span class="hljs-selector-attr">[代理]</span> -HTTP GET-> <span class="hljs-selector-attr">[服务器]</span>
-<span class="hljs-selector-attr">[客户端]</span> <-200 OK- <span class="hljs-selector-attr">[Stunnel客户端模式]</span> <-SSL加密的200 OK- <span class="hljs-selector-attr">[Stunnel服务器模式]</span> <-200 OK- <span class="hljs-selector-attr">[代理]</span> <-200 OK- <span class="hljs-selector-attr">[服务器]</span></pre>
-<p><strong>HTTPS流量，SSL加密的代理连接</strong></p>
-<p>传统的HTTP代理走HTTPS流量的时候，HTTP GET的内容经过SSL加密的，GFW无法做URL关键字过滤。但是客户端与代理之间的HTTP CONNECT仍然是明文传输的。GFW仍然可以根据CONNECT的目标域名或者IP地址来判断是不是访问了GFW不允许访问的网站。所以即便客户端发 的是HTTPS请求，仍然有必要在客户端与代理之间进行SSL加密。拓扑结构与上面相同。收发包的过程如下：</p>
-<pre class="hljs scss"><span class="hljs-selector-attr">[客户端]</span> -HTTP CONNECT-> <span class="hljs-selector-attr">[Stunnel客户端模式]</span> -SSL加密的HTTP CONNECT-> <span class="hljs-selector-attr">[Stunnel服务器模式]</span> -HTTP CONNECT-> <span class="hljs-selector-attr">[代理]</span> -TCP SYN-> <span class="hljs-selector-attr">[服务器]</span>
-<span class="hljs-selector-attr">[客户端]</span> <-200 OK- <span class="hljs-selector-attr">[Stunnel客户端模式]</span> -SSL加密的200 OK-> <span class="hljs-selector-attr">[Stunnel服务器模式]</span> <-200 OK- <span class="hljs-selector-attr">[代理]</span> <-TCP SYN ACK- <span class="hljs-selector-attr">[服务器]</span> # 这里的200 OK与下面的200 OK的含义不同
-<span class="hljs-selector-attr">[客户端]</span> -SSL CLIENT HELLO->  <span class="hljs-selector-attr">[Stunnel客户端模式]</span> -SSL加密的SSL CLIENT HELLO-> <span class="hljs-selector-attr">[Stunnel服务器模式]</span> -SSL CLIENT HELLO-> <span class="hljs-selector-attr">[代理]</span> -SSL CLIENT HELLO-> <span class="hljs-selector-attr">[服务器]</span> # SSL握手包1
-... 以下略去。完成SSL握手之后，数据是在双层的SSL加密之下传输的</pre>
-<p>很明显，HTTP代理加上SSL传输的方式可以有效地对付GFW的关键字检查。但是蛋疼的地方是本来是客户端，代理与服务器之间三方的事情，现在变 成了五方会谈了。转手的次数越多，效率就越差。出错了，调试问题也越麻烦。除此之外，我们还额可以看到每个SSL连接建立需要四个包，两个来回。这个 SSL握手的成本不是一次性的，是附加在每个被代理的连接上的。考虑到很多HTTP请求都是短连接，内容也很少。所以每次多做一次SSL握手，额外负担相 比之下挺重的。</p>
-<p>&nbsp;</p>
-<p>转自 <a target="_blank" rel="noopener" href="https://www.oschina.net/question/12_117516">https://www.oschina.net/question/12_117516</a></p>
+        <h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><p>Iptables服务不是真正的防火墙，只是用来定义防火墙规则功能的”防火墙管理工具”，将定义好的规则交由内核中的netfilter即网络过滤器来读取，从而真正实现防火墙功能。<br>主要用途：</p>
+<ol>
+<li><p>代理服务：一种网络服务，通常就架设在路由上面，可完整的掌控局域网的对外连接。</p>
+</li>
+<li><p>IP Filter：直接分析最底层的封包表头数据来进行过滤，所以包括 MAC地址, IP, TCP, UDP, ICMP 等封包的信息都可以进行过滤分析的功能，用途非常广泛。</p>
+</li>
+</ol>
+<h4 id="iptables抵挡封包的方式："><a href="#iptables抵挡封包的方式：" class="headerlink" title="iptables抵挡封包的方式："></a>iptables抵挡封包的方式：</h4><p> [cc lang=”java”]<br> 拒绝让 Internet 的封包进入 Linux 主机的某些 port<br> 拒绝让某些来源 IP 的封包进入<br> 拒绝让带有某些特殊标志( flag )的封包进入<br> 分析硬件地址(MAC)来提供服务<br>[/cc]</p>
+<h4 id="链："><a href="#链：" class="headerlink" title="链："></a>链：</h4><p>iptables命令中设置数据过滤或处理数据包的策略叫做规则，将多个规则合成一个链，叫规则链。<br>规则链则依据处理数据包的位置不同分类：<br> [cc lang=”java”]<br> PREROUTING: 在进行路由判断之前所要进行的规则(DNAT/REDIRECT)<br> INPUT:处理入站的数据包<br> OUTPUT:处理出站的数据包<br> FORWARD:处理转发的数据包<br> POSTROUTING: 在进行路由判断之后所要进行的规则(SNAT/MASQUERADE)<br>[/cc]</p>
+<h4 id="表："><a href="#表：" class="headerlink" title="表："></a>表：</h4><p> [cc lang=”java”]<br>iptables中的规则表是用于容纳规则链，规则表默认是允许状态的，那么规则链就是设置被禁止的规则，而反之如果规则表是禁止状态的，那么规则链就是设置被允许的规则。<br> raw表:确定是否对该数据包进行状态跟踪<br> mangle表:为数据包设置标记（较少使用）<br> nat表:修改数据包中的源、目标IP地址或端口<br> filter表:确定是否放行该数据包（过滤）<br>[/cc]</p>
+<h4 id="规则表的先后顺序"><a href="#规则表的先后顺序" class="headerlink" title="规则表的先后顺序:"></a>规则表的先后顺序:</h4><p> [cc lang=”java”]<br> raw→mangle→nat→filter<br>[/cc]</p>
+<h4 id="规则链的先后顺序"><a href="#规则链的先后顺序" class="headerlink" title="规则链的先后顺序:"></a>规则链的先后顺序:</h4><p> [cc lang=”java”]<br> 入站顺序:PREROUTING→INPUT<br> 出站顺序:OUTPUT→POSTROUTING<br> 转发顺序:PREROUTING→FORWARD→POSTROUTING<br>[/cc]</p>
+<h4 id="另外注意："><a href="#另外注意：" class="headerlink" title="另外注意："></a>另外注意：</h4><p> [cc lang=”java”]<br>1.没有指定规则表则默认指filter表。<br>2.不指定规则链则指表内所有的规则链。<br>3.在规则链中匹配规则时会依次检查，匹配即停止（LOG规则例外），若没匹配项则按链的默认状态处理。<br>[/cc]</p>
+<h4 id="iptables命令中则常见的控制类型有："><a href="#iptables命令中则常见的控制类型有：" class="headerlink" title="iptables命令中则常见的控制类型有："></a>iptables命令中则常见的控制类型有：</h4><p> [cc lang=”java”]<br> ACCEPT:允许通过.<br> LOG:记录日志信息,然后传给下一条规则继续匹配.<br> REJECT:拒绝通过,必要时会给出提示.<br> DROP:直接丢弃,不给出任何回应.<br>[/cc]</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward #开启iptables forward转发功能。</p>
+<h4 id="iptables命令基本参数和用法"><a href="#iptables命令基本参数和用法" class="headerlink" title="iptables命令基本参数和用法:"></a>iptables命令基本参数和用法:</h4><p> [cc lang=”java”]<br> 格式为：”iptables [-t 表名] 选项 [链名] [条件] [-j 控制类型]”。<br>[/cc]</p>
+<p>以下格式的写法或许更为清楚明白：<br> [cc lang=”java”]<br> “iptables -[A’I 链] [-i’o 网络接口] [-p 协议] [-s 来源ip/网域] [-d 目标ip/网域] -j[ACCEPT’DROP]”<br>[/cc]</p>
+<p>查看规则：iptables [-t nat] -nL<br>清除规则：iptables [-t nat] -F </p>
+<h4 id="流量打标功能："><a href="#流量打标功能：" class="headerlink" title="流量打标功能："></a>流量打标功能：</h4><p>MARK标记用于将特定的数据包打上标签，供iptables配合TC做QOS流量限制或应用策略路由。</p>
+<p>看看和MARK相关的有哪些模块：<br>[cc lang=”java”]ls /usr/lib/iptables/‘grep -i mark<br>libxt_CONNMARK.so<br>libxt_MARK.so<br>libxt_connmark.so<br>libxt_mark.so[/cc]<br>其中大写的为标记模块，小写的为匹配模块，它们之间是相辅相成的，分别作用如下：</p>
+<p>[cc lang=”java”]iptables -j MARK –help<br>–set-mark #标记数据包<br>iptables -t mangle -A PREROUTING -p tcp -j MARK –set-mark 1<br>#所有TCP数据标记1[/cc]</p>
+<p>[cc lang=”java”]iptables -m mark –help<br>–mark value #匹配数据包的MARK标记<br>iptables -t mangle -A PREROUTING -p tcp -m mark –mark 1 -j CONNMARK –save-mark<br>#匹配标记1的数据并保存数据包中的MARK到连接中[/cc]</p>
+<p>[cc lang=”java”]iptables -j CONNMARK –help<br>–set-mark #标记连接<br>–save-mark #保存数据包中的MARK到连接中<br>–restore-mark #将连接中的MARK设置到同一连接的其它数据包中<br>iptables -t mangle -A PREROUTING -p tcp -j CONNMARK –set-mark 1[/cc]</p>
+<p>[cc lang=”java”]iptables -m connmark –help<br>–mark value #匹配连接的MARK的标记<br>iptables -t mangle -A PREROUTING -p tcp -m connmark –mark 1 -j CONNMARK –restore-mark<br>#匹配连接标记1并将连接中的标记设置到数据包中[/cc]</p>
+<p><strong>说明：</strong><br>1、以前MARK标记只能用在mangle表上，而现在可以使用在nat表上。<br>2、MARK标记不能作为扩路由的传递，只能在内核上传递。如果要实现，那么可以使用TOS标记。<br>3、使用时注意iptables的版本，不同的版本支持的方法不一样。</p>
+<p><strong>1. 转发一个端口流量到本机另外一个端口：</strong><br>[cc lang=”java”] iptables -t nat -A PREROUTING -p tcp –dport 7777 -j REDIRECT –to-port 6666[/cc]</p>
+<p><strong>2. 转发一个端口流量到另外一个机器的某个端口：</strong><br> [cc lang=”java”]<br> iptables -t nat -A PREROUTING -p tcp -m tcp –dport 7777 -j DNAT –to-destination 172.96.226.218:3128<br> iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE   //进行ip伪装，将源ip改为代理主机的ip，主要为了回包，修改之后回包会返回到代理主机，代理主机再根据原请求的ip和端口<br> iptables -t nat -A POSTROUTING -p tcp -m tcp –dport 3128 -j SNAT –to-source 122.51.180.184   //修改源ip，也是为了回包，同理<br>[/cc]</p>
+<p><strong>3. 开放网口与ip来源</strong><br>例：所有的来自 lo 这个网口的封包，都予以接受<br> [cc lang=”java”]<br> iptables -A INPUT -i lo -j ACCEPT<br>[/cc]<br>例：目标来自 192.168.1.200 这个 IP 的封包都予以接受<br> [cc lang=”java”]<br> iptables -A INPUT -i eth0 -s 192.168.1.200 -j ACCEPT<br>[/cc]<br>例：192.168.1.0/24 可接受，但 192.168.1.10 丢弃<br> [cc lang=”java”]<br> iptalbes -A INPUT -i eth0 -s 192.168.1.0/24 -j ACCEPT<br> iptables -A INPUT -i eth0 -s 192.168.1.10 -j DROP<br>[/cc]</p>
+<p><strong>4. 规则记录，相关信息就会被写入到/var/log/messages当中，然后该封包会继续进行后续的规则比对。LOG 这个动作仅在进行记录而已，并不会影响到这个封包的其它规则比对的</strong><br> [cc lang=”java”]<br> iptables -A INPUT -s 192.168.1.200 -j LOG<br>[/cc]</p>
+<p><strong>5. 开放tcp、udp端口</strong><br>例：开放samba端口（udp137，138；tcp139,445）<br> [cc lang=”java”]<br> iptables -A INPUT -i eth0 -p udp -dport 137:138 -j ACCEPT<br> iptables -A INPUT -i eth0 -p tcp -dport 139-j ACCEPT<br> iptables -A INPUT -i eth0 -p tcp -dport 445-j ACCEPT<br> iptables -A OUTPUT -p tcp –sport 7777 -j ACCEPT<br>[/cc]</p>
+<p><strong>6. 匹配ICMP端口和ICMP类型</strong><br> [cc lang=”java”]<br> iptables -A INPUT -p icmp -icmp-type 类型 -j ACCEPT<br>参数：–icmp-type ：后面必须要接 ICMP 的封包类型，也可以使用代号，<br>例如 8 代表 echo request 的意思。（可自查询ICMP-type对应表）<br>[/cc]</p>
+<p><strong>7. syn的处理方式</strong><br>指定TCP匹配扩展<br>使用 -tcp-flags 选项可以根据tcp包的标志位进行过滤。<br> [cc lang=”java”]<br> iptables -A INPUT -p tcp -tcp-flags SYN,FIN,ACK SYN<br> iptables -A FROWARD -p tcp -tcp-flags ALL SYN,ACK<br>[/cc]<br>上实例中第一个表示SYN、ACK、FIN的标志都检查，但是只有SYN匹配。第二个表示ALL（SYN，ACK，FIN，RST，URG，PSH）的标志都检查，但是只有设置了SYN和ACK的匹配。<br> [cc lang=”java”]<br> iptables -A FORWARD -p tcp –syn<br>[/cc]<br>选项-syn相当于”–tcp-flags SYN,RST,ACK SYN”的简写。</p>
+<p><strong>8. 只要已建立或相关封包就予以通过，只要是不合法封包就丢弃</strong><br> [cc lang=”java”]<br> iptables -A INPUT -m state -state RELATED ESTABLISHED -j ACCEPT<br> iptables -A INPUT -m state -state INVALID -j DORP<br>[/cc]<br>例：对局域网内mac地址为00:0C:29:56:A6:A2主机开放其联机<br> [cc lang=”java”]<br> iptables -A INPUT -m mac –mac-source 00:0C:29:56:A6:A2 -j ACCEPT<br>[/cc]</p>
+<h4 id="NAT（Network-AddressTranslation网络地址转换）"><a href="#NAT（Network-AddressTranslation网络地址转换）" class="headerlink" title="NAT（Network AddressTranslation网络地址转换）"></a>NAT（Network AddressTranslation网络地址转换）</h4><p>首先说说局域网内封包的传送，<br> [cc lang=”java”]</p>
+<ol>
+<li>先经过 NAT table 的 PREROUTING 链；</li>
+<li>经由路由判断确定这个封包是要进入本机与否，若不进入本机，则下一步；</li>
+<li>再经过 Filter table 的 FORWARD 链；</li>
+<li>通过 NAT table 的 POSTROUTING 链，最后传送出去。<br>[/cc]</li>
+</ol>
+<p>NAT 主机的重点就在于上面流程的第 1,4 步骤，也就是 NAT table 的两条重要的链：PREROUTING 与POSTROUTING。 那这两条链重要功能在于修改IP，而这两条链修改的IP又是不一样的，POSTROUTING在修改来源IP，PREROUTING则在修改目标IP 。由于修改的 IP 不一样，所以就称为来源NAT (Source NAT, SNAT) 及目标 NAT (Destination NAT, DNAT)。</p>
+<ol>
+<li><p><strong>SNAT即源地址转换</strong>，能够让多个内网用户通过一个外网地址上网，解决了IP资源匮乏的问题。一个无线路由器也就使用此技术。<br>需要将192.168.10.10转换为111.196.211.212，iptables命令如下：<br>[cc lang=”java”] iptables -t nat -A POSTROUTING -s 192.168.10.10 -o eth1 -j SNAT –to-source 111.196.221.212[/cc]<br>外网IP地址不稳定的情况即可使用MASQUERADE(动态伪装),能够自动的寻找外网地址并改为当前正确的外网IP地址<br>[cc lang=”java”] iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -j MASQUERADE[/cc]</p>
+</li>
+<li><p><strong>DNAT即目地地址转换</strong>，则能够让外网用户访问局域网内不同的服务器。（相当于SNAT的反向代理）<br>目标地址192.168.10.6在路由前就转换成61.240.149.149，需在网关上运行iptables命令如下：<br>[cc lang=”java”] iptables -t nat -A PREROUTING -i eth1 -d 61.240.149.149 -p tcp -dport 80 -j DNAT –to-destination 192.168.10.6:80[/cc]<br>eth1网口传入，且想要使用 port 80 的服务时，将该封包重新传导到 192.168.1.210:80 的 IP 及 port 上面,可以同时修改 IP 与 port。此为地址映射与端口转换。</p>
+</li>
+</ol>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/whych/p/9147900.html">https://www.cnblogs.com/whych/p/9147900.html</a></p>
 
       
 
@@ -653,7 +493,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/19/http%E4%BB%A3%E7%90%86%E4%B8%8Ehttps%E4%BB%A3%E7%90%86/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/01/10/iptables%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
         </p>
       
 
@@ -683,31 +523,40 @@
 
 
   
-    <article id="post-socks5代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-java开发bug集合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/19/socks5%E4%BB%A3%E7%90%86/">Socks5代理</a>
+      <a class="article-title" href="/2020/01/09/java%E5%BC%80%E5%8F%91bug%E9%9B%86%E5%90%88/">Java开发bug集合</a>
     </h1>
   
 
         
-        <a href="/2020/02/19/socks5%E4%BB%A3%E7%90%86/" class="archive-article-date">
-  	<time datetime="2020-02-18T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-19</time>
+        <a href="/2020/01/09/java%E5%BC%80%E5%8F%91bug%E9%9B%86%E5%90%88/" class="archive-article-date">
+  	<time datetime="2020-01-08T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>socks5/ss5/socket5代理，可用来做7层、4层代理，可以设置账号密码</p>
-<p>socks4代理只支持tcp协议<br>socks5代理支持tcp,udp协议</p>
-<p><strong>socks5代理搭建简易方法：</strong></p>
-<p>[cc lang=”java”]wget <a target="_blank" rel="noopener" href="https://github.com/fengyouchao/pysocks/raw/master/socks5.py">https://github.com/fengyouchao/pysocks/raw/master/socks5.py</a><br>python2.7 socks5.py start[/cc]</p>
-<p>socks代理设置好之后，可以通过proxifier设置mac电脑的全局代理，方便快捷好用</p>
+        <p>1. 发邮件这种逻辑，一定要加频控，否则账号特别容易被封禁</p>
+<ol start="2">
+<li><p>频控逻辑：<br>错误示范：去redis查(get)一个key，如果这个key不存在，则继续业务逻辑，并且将key写入redis(set)，写入时设置一个时效性<br>错误原因：若存在多台机器，多个机器同时get一个值，虽然get操作是一个个来的，但是在写入新的值之前，有可能多个线程都获取了同一个值，重复进行业务逻辑<br>正确写法：直接去redis写入一个key(setnx)，不存在才写入，根据返回的结果判断该值是否存在，这种逻辑应用了redis的原子性，redis是单线程的，所有操作都是一个个来的</p>
+</li>
+<li><p>dubbo接口可以返回自定义类型的对象，但是该类型必须实现 Serializable 接口，否则会报错</p>
+</li>
+<li><p>Integer中的==与equals()<br> ==：若等号两边有int，拆箱后比较值的大小；若没有，则比较引用地址，但是注意IntegerCache<br> equals()：先比较类型是否相同，基本类型会装箱后比较，然后再比较大小<br> IntegerCache：Integer类的内部类，里面有一个Integer对象数组，用于存放已经存在的且范围在[-128,127]中的对象</p>
+<p> Integer x = 100，会调用Integer的valueOf()方法，这个方法就是返回一个Integer对象，返回前会先判断是否在-128-127之间，且该值是否有缓存，有的话直接返回引用<br>[cc lang=”java”]Integer i02 = 59;<br>Integer i03 = Integer.valueOf(59);<br>Integer i04 = new Integer(59);<br>System.out.println(i02 == i03);  //true 因为59位于缓存区间直接从缓存中获取<br>System.out.println(i02 == i04);  //false<br>System.out.println(i03 == i04);  //false</p>
+</li>
+</ol>
+<p>Integer i02 = 200;<br>Integer i03 = Integer.valueOf(200);<br>Integer i04 = new Integer(200);<br>System.out.println(i02 == i03);  //false 因为200超出缓存区间从新创建对象<br>System.out.println(i02 == i04);  //false<br>System.out.println(i03 == i04);  //false<br>[/cc]</p>
+<ol start="5">
+<li>int范围要牢记，-2^31 ~ 2^31-1，所以在计算时，若出现  for循环中 int i, i *= 5之类的代码，最好把i改成long，避免溢出  long - 64bit </li>
+</ol>
 
       
 
@@ -721,7 +570,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">代理相关</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
         		</li>
       		
 		</ul>
@@ -731,7 +580,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/19/socks5%E4%BB%A3%E7%90%86/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/01/09/java%E5%BC%80%E5%8F%91bug%E9%9B%86%E5%90%88/">展开全文 >></a>
         </p>
       
 
@@ -761,42 +610,35 @@
 
 
   
-    <article id="post-国密算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-squid代理搭建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/19/%E5%9B%BD%E5%AF%86%E7%AE%97%E6%B3%95/">国密算法</a>
+      <a class="article-title" href="/2020/01/08/squid%E4%BB%A3%E7%90%86%E6%90%AD%E5%BB%BA/">Squid代理搭建</a>
     </h1>
   
 
         
-        <a href="/2020/02/19/%E5%9B%BD%E5%AF%86%E7%AE%97%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2020-02-18T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-19</time>
+        <a href="/2020/01/08/squid%E4%BB%A3%E7%90%86%E6%90%AD%E5%BB%BA/" class="archive-article-date">
+  	<time datetime="2020-01-07T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code>SM2: 国密椭圆曲线算法库
-    . 支持Generate Key, Sign, Verify基础操作
-    . 支持加密和不加密的pem文件格式(加密方法参见RFC5958, 具体实现参加代码)
-    . 支持证书的生成，证书的读写(接口兼容rsa和ecdsa的证书)
-    . 支持证书链的操作(接口兼容rsa和ecdsa)
-    . 支持crypto.Signer接口
-
-SM3: 国密hash算法库
-   . 支持基础的sm3Sum操作
-   . 支持hash.Hash接口
-
-SM4: 国密分组密码算法库
-    . 支持Generate Key, Encrypt, Decrypt基础操作
-    . 提供Cipher.Block接口
-    . 支持加密和不加密的pem文件格式(加密方法为pem block加密, 具体函数为x509.EncryptPEMBlock)</code></pre>
-<p>&nbsp;</p>
+        <p><strong>是什么：</strong><br>一个高性能的7层代理缓存服务器，缓存指多次请求同一个网站，第一次的请求结果会被缓存下来，后续请求的时候直接返回缓存，缓存不是全量，而且对于哪些请求需要缓存会有问题，所以不需要的话就关掉</p>
+<p><strong>支持的协议：</strong><br>HTTP，FTP，GOPHER（过时的信息查找系统），SSL和WAIS等协议</p>
+<p><strong>搭建：</strong></p>
+<ol>
+<li>yum install squid</li>
+<li>vi /etc/squid/squid.conf，修改为http_access allow all</li>
+<li>cd /lib/systemd/system<br>squid //运行squid，这步等效于 systemctl start squid</li>
+<li>查看端口是否开启<br> netstat -tunlp ‘ grep 3128</li>
+</ol>
 
       
 
@@ -820,7 +662,7 @@ SM4: 国密分组密码算法库
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/19/%E5%9B%BD%E5%AF%86%E7%AE%97%E6%B3%95/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/01/08/squid%E4%BB%A3%E7%90%86%E6%90%AD%E5%BB%BA/">展开全文 >></a>
         </p>
       
 
@@ -850,20 +692,218 @@ SM4: 国密分组密码算法库
 
 
   
-    <article id="post-bpf" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-7层代理和4层代理的搭建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/01/bpf/">bpf</a>
+      <a class="article-title" href="/2020/01/07/7%E5%B1%82%E4%BB%A3%E7%90%86%E5%92%8C4%E5%B1%82%E4%BB%A3%E7%90%86%E7%9A%84%E6%90%AD%E5%BB%BA/">7层代理和4层代理的搭建</a>
     </h1>
   
 
         
-        <a href="/2020/02/01/bpf/" class="archive-article-date">
-  	<time datetime="2020-01-31T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-01</time>
+        <a href="/2020/01/07/7%E5%B1%82%E4%BB%A3%E7%90%86%E5%92%8C4%E5%B1%82%E4%BB%A3%E7%90%86%E7%9A%84%E6%90%AD%E5%BB%BA/" class="archive-article-date">
+  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>nginx iptables ipset squid socks</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/07/7%E5%B1%82%E4%BB%A3%E7%90%86%E5%92%8C4%E5%B1%82%E4%BB%A3%E7%90%86%E7%9A%84%E6%90%AD%E5%BB%BA/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-swagger学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/07/swagger%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">Swagger学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/07/swagger%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="archive-article-date">
+  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Swagger 是一个规范且完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。</p>
+<p>用途：给restful接口自动生成html文档、接口测试（类似postman）、markdown文档</p>
+<p><strong>Springboot使用方式：</strong></p>
+<ol>
+<li><p>引入依赖(可用的版本号之一，试过高版本会出现意料之外的问题，所以采用2.6.1版本)<br>[cc lang=”java”]compile group: ‘io.springfox’, name: ‘springfox-swagger2’, version: ‘2.6.1’<br>compile group: ‘io.springfox’, name: ‘springfox-swagger-ui’, version: ‘2.6.1’<br>compile “io.github.swagger2markup:swagger2markup:1.3.3”[/cc]</p>
+</li>
+<li><p>添加swagger配置类<br>[cc lang=”java”]<br>import org.springframework.context.annotation.Bean;<br>import org.springframework.context.annotation.Configuration;<br>import org.springframework.web.bind.annotation.RequestMethod;<br>import springfox.documentation.builders.ApiInfoBuilder;<br>import springfox.documentation.builders.PathSelectors;<br>import springfox.documentation.builders.RequestHandlerSelectors;<br>import springfox.documentation.builders.ResponseMessageBuilder;<br>import springfox.documentation.service.ApiInfo;<br>import springfox.documentation.service.ResponseMessage;<br>import springfox.documentation.spi.DocumentationType;<br>import springfox.documentation.spring.web.plugins.Docket;<br>import springfox.documentation.swagger2.annotations.EnableSwagger2;</p>
+</li>
+</ol>
+<p>import java.util.ArrayList;<br>import java.util.Arrays;<br>import java.util.HashSet;<br>import java.util.List;</p>
+<p>@Configuration<br>@EnableSwagger2<br>public class DocConfig {<br>    @Bean<br>    public Docket createRestApi() {<br>        List<ResponseMessage> responseMessageList = new ArrayList&lt;&gt;();<br>        responseMessageList.add(new ResponseMessageBuilder().code(404).message(“找不到资源”).build());   //状态码统一规定<br>        responseMessageList.add(new ResponseMessageBuilder().code(500).message(“服务器内部错误”).build());   //状态码统一规定<br>        return new Docket(DocumentationType.SWAGGER_2)<br>                .consumes(new HashSet&lt;&gt;(Arrays.asList(“application/json;charset=utf-8”)))<br>                .enable(true)    //此设置为重点，不加的话页面看不到，一定要加！！！！！<br>                .globalResponseMessage(RequestMethod.POST, responseMessageList)<br>                .globalResponseMessage(RequestMethod.GET, responseMessageList)<br>                .apiInfo(apiInfo())<br>                .select()<br>                .apis(RequestHandlerSelectors.basePackage(“xxx”)) //controller文件夹相对路径<br>                .paths(PathSelectors.any()) // 可以根据url路径设置哪些请求加入文档，忽略哪些请求<br>                .build();<br>    }</p>
+<pre><code>private ApiInfo apiInfo() &#123;
+    return new ApiInfoBuilder()
+            .title(&quot;xxx&quot;) //设置文档的标题
+            .description(&quot;xxx&quot;) // 设置文档的描述
+            .version(&quot;1.0.0&quot;) // 设置文档的版本信息-&gt; 1.0.0 Version information
+            .build();
+&#125;</code></pre>
+<p>}</p>
+<p>[/cc]</p>
+<ol start="3">
+<li><p>启动函数增加swagger注解<br>[cc lang=”java”]@EnableSwagger2[/cc]</p>
+</li>
+<li><p>对controller类或接口增加详细注解（可省略）<br>[cc lang=”java”]<br>@Api(value=”用户controller”,tags={“用户操作接口”})  //用于类，表示这个类是swagger的资源<br>@ApiIgnore()  //用于类，方法，方法参数，表示这个方法或者类被忽略<br>@ApiOperation(value=”获取用户信息”,tags={“获取用户信息copy”},notes=”注意问题点”)  //用于方法，表示一个http请求的操作<br>@ApiParam(name=”id”,value=”用户id”,required=true)  //用于方法，参数，字段说明，表示对参数的添加元数据（说明或是否必填等）<br>[/cc]</p>
+</li>
+<li><p>项目启动<br>访问页面  <a target="_blank" rel="noopener" href="http://localhost:23588/swagger-ui.html%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E9%A1%B5%E9%9D%A2">http://localhost:23588/swagger-ui.html，可以看到页面</a><br>访问页面  <a target="_blank" rel="noopener" href="http://localhost:23588/v2/api-docs%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E6%8E%A5%E5%8F%A3json%E6%96%87%E6%A1%A3">http://localhost:23588/v2/api-docs，可以看到接口json文档</a></p>
+</li>
+<li><p>编写测试类生成markdown文件，运行生成markdown文件</p>
+</li>
+</ol>
+<p>[cc lang=”java”]import io.github.swagger2markup.GroupBy;<br>import io.github.swagger2markup.Language;<br>import io.github.swagger2markup.Swagger2MarkupConfig;<br>import io.github.swagger2markup.Swagger2MarkupConverter;<br>import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;<br>import io.github.swagger2markup.markup.builder.MarkupLanguage;</p>
+<p>import java.net.URL;<br>import java.nio.file.Paths;</p>
+<p>public class DocGenerator {</p>
+<pre><code>@org.junit.Test
+public void generateMarkdown() throws Exception&#123;
+    System.out.println(&quot;generate test&quot;);
+    Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+            .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+            .withOutputLanguage(Language.ZH)
+            .withPathsGroupedBy(GroupBy.TAGS)
+            .withGeneratedExamples()
+            .withoutInlineSchema()
+            .withFlatBody()
+            .withInterDocumentCrossReferences()
+            .build();
+    Swagger2MarkupConverter.from(new URL(&quot;http://localhost:23588/v2/api-docs&quot;))
+            .withConfig(config)
+            .build()
+            .toFile(Paths.get(&quot;/Users/xxx/Documents/test&quot;));   //生成的markdown地址
+&#125;</code></pre>
+<p>}[/cc]</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/07/swagger%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-switch加速代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/07/switch%E5%8A%A0%E9%80%9F%E4%BB%A3%E7%90%86/">Switch加速代理</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/07/switch%E5%8A%A0%E9%80%9F%E4%BB%A3%E7%90%86/" class="archive-article-date">
+  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
 </a>
         
       </header>
@@ -883,7 +923,7 @@ SM4: 国密分组密码算法库
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">代理相关</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
         		</li>
       		
 		</ul>
@@ -893,7 +933,80 @@ SM4: 国密分组密码算法库
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/01/bpf/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/01/07/switch%E5%8A%A0%E9%80%9F%E4%BB%A3%E7%90%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-加密算法整理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/07/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/">加密算法整理</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/07/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/" class="archive-article-date">
+  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/07/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/">展开全文 >></a>
         </p>
       
 
@@ -925,7 +1038,7 @@ SM4: 国密分组密码算法库
   
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
     </nav>
   
 
