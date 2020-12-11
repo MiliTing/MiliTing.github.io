@@ -152,92 +152,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-haproxy" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/31/haproxy/">Haproxy</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/31/haproxy/" class="archive-article-date">
-  	<time datetime="2020-01-30T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h6 id=""><a href="#" class="headerlink" title=""></a></h6><ol>
-<li>[cc lang=”java”]yum install haproxy</li>
-</ol>
-<p>vi /etc/haproxy/haproxy.cfg</p>
-<p>haproxy -f /etc/haproxy/haproxy.cfg </p>
-<p>systemctl restart haproxy[/cc]</p>
-<ol start="2">
-<li>[cc lang=”java”]<br>global<pre><code> daemon</code></pre>
-</li>
-</ol>
-<p>defaults<br>        mode    tcp<br>        retries 2<br>        option  redispatch<br>        option  abortonclose<br>        maxconn 4096<br>        timeout connect 5s<br>        timeout client 15m<br>        timeout server 15m</p>
-<p>#上面两段不用动，只修改下面一段的aaa-规则名、7777-监听端口、x.x.x.x:xx-目的ip端口，即可实现端口流量转发</p>
-<p>listen aaa<br>        bind *:7777<br>        mode tcp<br>        tcp-request inspect-delay 5s<br>        default-server inter 3s rise 2 fall 3<br>        server srv01 x.x.x.x:xx weight 10 check[/cc]</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/31/haproxy/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-根据域名查ip的集中方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -285,7 +199,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
         		</li>
       		
 		</ul>
@@ -362,7 +276,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
         		</li>
       		
 		</ul>
@@ -483,7 +397,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">代理相关</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">代理</a>
         		</li>
       		
 		</ul>
@@ -726,7 +640,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">代理</a>
         		</li>
       		
 		</ul>
@@ -923,7 +837,7 @@ public void generateMarkdown() throws Exception&#123;
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">代理</a>
         		</li>
       		
 		</ul>
@@ -1007,6 +921,79 @@ public void generateMarkdown() throws Exception&#123;
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/01/07/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-单测学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/07/%E5%8D%95%E6%B5%8B%E5%AD%A6%E4%B9%A0/">单测学习</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/07/%E5%8D%95%E6%B5%8B%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/07/%E5%8D%95%E6%B5%8B%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
         </p>
       
 
@@ -1133,11 +1120,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">密码相关</a>
+                <a href="javascript:void(0)" class="js-tag color3">代理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">代理相关</a>
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1145,7 +1136,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">密码相关</a>
               </li>
             
             <div class="clearfix"></div>
