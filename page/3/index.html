@@ -152,6 +152,175 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-java开发bug集合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/09/java%E5%BC%80%E5%8F%91bug%E9%9B%86%E5%90%88/">Java开发bug集合</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/09/java%E5%BC%80%E5%8F%91bug%E9%9B%86%E5%90%88/" class="archive-article-date">
+  	<time datetime="2020-01-08T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1. 发邮件这种逻辑，一定要加频控，否则账号特别容易被封禁</p>
+<ol start="2">
+<li><p>频控逻辑：<br>错误示范：去redis查(get)一个key，如果这个key不存在，则继续业务逻辑，并且将key写入redis(set)，写入时设置一个时效性<br>错误原因：若存在多台机器，多个机器同时get一个值，虽然get操作是一个个来的，但是在写入新的值之前，有可能多个线程都获取了同一个值，重复进行业务逻辑<br>正确写法：直接去redis写入一个key(setnx)，不存在才写入，根据返回的结果判断该值是否存在，这种逻辑应用了redis的原子性，redis是单线程的，所有操作都是一个个来的</p>
+</li>
+<li><p>dubbo接口可以返回自定义类型的对象，但是该类型必须实现 Serializable 接口，否则会报错</p>
+</li>
+<li><p>Integer中的==与equals()<br> ==：若等号两边有int，拆箱后比较值的大小；若没有，则比较引用地址，但是注意IntegerCache<br> equals()：先比较类型是否相同，基本类型会装箱后比较，然后再比较大小<br> IntegerCache：Integer类的内部类，里面有一个Integer对象数组，用于存放已经存在的且范围在[-128,127]中的对象</p>
+<p> Integer x = 100，会调用Integer的valueOf()方法，这个方法就是返回一个Integer对象，返回前会先判断是否在-128-127之间，且该值是否有缓存，有的话直接返回引用<br>[cc lang=”java”]Integer i02 = 59;<br>Integer i03 = Integer.valueOf(59);<br>Integer i04 = new Integer(59);<br>System.out.println(i02 == i03);  //true 因为59位于缓存区间直接从缓存中获取<br>System.out.println(i02 == i04);  //false<br>System.out.println(i03 == i04);  //false</p>
+</li>
+</ol>
+<p>Integer i02 = 200;<br>Integer i03 = Integer.valueOf(200);<br>Integer i04 = new Integer(200);<br>System.out.println(i02 == i03);  //false 因为200超出缓存区间从新创建对象<br>System.out.println(i02 == i04);  //false<br>System.out.println(i03 == i04);  //false<br>[/cc]</p>
+<ol start="5">
+<li>int范围要牢记，-2^31 ~ 2^31-1，所以在计算时，若出现  for循环中 int i, i *= 5之类的代码，最好把i改成long，避免溢出  long - 64bit </li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/09/java%E5%BC%80%E5%8F%91bug%E9%9B%86%E5%90%88/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-squid代理搭建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/08/squid%E4%BB%A3%E7%90%86%E6%90%AD%E5%BB%BA/">Squid代理搭建</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/08/squid%E4%BB%A3%E7%90%86%E6%90%AD%E5%BB%BA/" class="archive-article-date">
+  	<time datetime="2020-01-07T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>是什么：</strong><br>一个高性能的7层代理缓存服务器，缓存指多次请求同一个网站，第一次的请求结果会被缓存下来，后续请求的时候直接返回缓存，缓存不是全量，而且对于哪些请求需要缓存会有问题，所以不需要的话就关掉</p>
+<p><strong>支持的协议：</strong><br>HTTP，FTP，GOPHER（过时的信息查找系统），SSL和WAIS等协议</p>
+<p><strong>搭建：</strong></p>
+<ol>
+<li>yum install squid</li>
+<li>vi /etc/squid/squid.conf，修改为http_access allow all</li>
+<li>cd /lib/systemd/system<br>squid //运行squid，这步等效于 systemctl start squid</li>
+<li>查看端口是否开启<br> netstat -tunlp ‘ grep 3128</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/08/squid%E4%BB%A3%E7%90%86%E6%90%AD%E5%BB%BA/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-7层代理和4层代理的搭建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
