@@ -173,7 +173,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Java异步编程</p>
-<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903959996416008">https://juejin.cn/post/6844903959996416008</a></p>
 <p> <strong>没有特殊说明时，一个类默认是非线程安全的。</strong></p>
 <table>
 <thead>
@@ -196,7 +195,7 @@
 <tr>
 <td align="left">Set</td>
 <td align="left">HashSet / TreeSet</td>
-<td align="left">CopyOnWriteArraySet</td>
+<td align="left">CopyOnWriteArraySet / ConcurrentHashSet</td>
 </tr>
 <tr>
 <td align="left">Queue</td>
@@ -229,7 +228,7 @@
 <p><strong>可重入锁：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Java的线程锁是可重入的锁</span><br><span class="line">一个线程可以重复获取同一个锁</span><br></pre></td></tr></table></figure>
 
-<p>死锁：</p>
+<p><strong>死锁：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">两个线程各自持有不同的锁，然后各自试图获取对方手里的锁，造成了双方无限等待下去</span><br><span class="line">避免方法：线程获取锁的顺序要一致。即严格按照先获取lockA，再获取lockB的顺序</span><br></pre></td></tr></table></figure>
 
 <p><strong><code>wait</code>和<code>notify</code>用于多线程协调运行：</strong></p>
@@ -257,15 +256,6 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- `CompletableFuture`可以指定异步处理流程：</span><br><span class="line">- `thenAccept()`处理正常结果；</span><br><span class="line">- `exceptional()`处理异常结果；</span><br><span class="line">- `thenApplyAsync()`用于串行化另一个`CompletableFuture`；</span><br><span class="line">- `anyOf()`和`allOf()`用于并行化多个`CompletableFuture`。</span><br></pre></td></tr></table></figure>
 
 <p>Fork/Join是一种基于“分治”的算法：通过分解任务，并行执行，最后合并结果得到最终结果。</p>
-<p>1：haseSet的底层其实是hashMap</p>
-<p>2：treeSet的底层其实就是一个TreeMap</p>
-<p>3：linkedHashSet底层LinkedHashMap</p>
-<p>Set集合怎么实现线程安全？<br>方案一：<br>和list一样，使用Colletcions这个工具类syn方法类创建个线程安全的set.</p>
-<p>Set<String> synSet = Collections.synchronizedSet(new HashSet&lt;&gt;());</p>
-<p>方案二：<br>使用JUC包里面的CopyOnWriteArraySet</p>
-<p>Set<String> copySet = new CopyOnWriteArraySet&lt;&gt;();</p>
-<p>三：guava其实已经实现了线程安全的ConcurrentHashSet</p>
-<p>Set<String> s = Sets.newConcurrentHashSet();</p>
 
       
 
