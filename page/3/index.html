@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Hexo</title>
+  <title>Fight For Fun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="Fight For Fun">
 <meta property="og:url" content="http://example.com/page/3/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
+<meta property="og:site_name" content="Fight For Fun">
+<meta property="og:locale">
+<meta property="article:author" content="MiliTing">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Fight For Fun" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -151,6 +151,329 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-bpf" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/01/bpf/">bpf</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/01/bpf/" class="archive-article-date">
+  	<time datetime="2020-01-31T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">代理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/01/bpf/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-haproxy" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/31/haproxy/">Haproxy</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/31/haproxy/" class="archive-article-date">
+  	<time datetime="2020-01-30T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h6 id=""><a href="#" class="headerlink" title=""></a></h6><ol>
+<li>[cc lang=”java”]yum install haproxy</li>
+</ol>
+<p>vi /etc/haproxy/haproxy.cfg</p>
+<p>haproxy -f /etc/haproxy/haproxy.cfg </p>
+<p>systemctl restart haproxy[/cc]</p>
+<ol start="2">
+<li>[cc lang=”java”]<br>global<pre><code> daemon</code></pre>
+</li>
+</ol>
+<p>defaults<br>        mode    tcp<br>        retries 2<br>        option  redispatch<br>        option  abortonclose<br>        maxconn 4096<br>        timeout connect 5s<br>        timeout client 15m<br>        timeout server 15m</p>
+<p>#上面两段不用动，只修改下面一段的aaa-规则名、7777-监听端口、x.x.x.x:xx-目的ip端口，即可实现端口流量转发</p>
+<p>listen aaa<br>        bind *:7777<br>        mode tcp<br>        tcp-request inspect-delay 5s<br>        default-server inter 3s rise 2 fall 3<br>        server srv01 x.x.x.x:xx weight 10 check[/cc]</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">代理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/31/haproxy/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-根据域名查ip的集中方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/31/%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E6%9F%A5ip%E7%9A%84%E9%9B%86%E4%B8%AD%E6%96%B9%E6%B3%95/">ip-域名互查的几种方法</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/31/%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E6%9F%A5ip%E7%9A%84%E9%9B%86%E4%B8%AD%E6%96%B9%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2020-01-30T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="根据域名查ip"><a href="#根据域名查ip" class="headerlink" title="根据域名查ip:"></a>根据域名查ip:</h4><h6 id=""><a href="#" class="headerlink" title=""></a></h6><ol>
+<li><p>ping <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a></p>
+</li>
+<li><p>nslookup，回车后输入域名</p>
+</li>
+<li><p>dig <a href="http://www.baidu.com，可以查到A记录，A记录即最常见的dns记录类型，[dig详解](https://www.imooc.com/article/26971?block_id=tuijian_wz)">www.baidu.com，可以查到A记录，A记录即最常见的dns记录类型，[dig详解](https://www.imooc.com/article/26971?block_id=tuijian_wz)</a><br>若想只看ip信息，可以 dig <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> +short</p>
+</li>
+</ol>
+<h4 id="根据ip查域名"><a href="#根据ip查域名" class="headerlink" title="根据ip查域名:"></a>根据ip查域名:</h4><h6 id="-1"><a href="#-1" class="headerlink" title=""></a></h6><ol>
+<li><p>nslookup，回车后输入ip</p>
+</li>
+<li><p>dig -x ip [+short]</p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/31/%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E6%9F%A5ip%E7%9A%84%E9%9B%86%E4%B8%AD%E6%96%B9%E6%B3%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-虚拟机三种网络模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/21/%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/">虚拟机三种网络模式</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/21/%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2020-01-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="虚拟机三种网络模式的区别："><a href="#虚拟机三种网络模式的区别：" class="headerlink" title="虚拟机三种网络模式的区别："></a>虚拟机三种网络模式的区别：</h1><h4 id="桥接："><a href="#桥接：" class="headerlink" title="桥接："></a>桥接：</h4><p>宿主机ip为192.168.1.2，虚拟机的ip为192.168.1.3，路由器分发的ip，对外来说相当于局域网内的另外一台机器</p>
+<h4 id="nat：网络地址转换，其实就是流量转发到另一个ip"><a href="#nat：网络地址转换，其实就是流量转发到另一个ip" class="headerlink" title="nat：网络地址转换，其实就是流量转发到另一个ip"></a>nat：网络地址转换，其实就是流量转发到另一个ip</h4><p>宿主机ip为192.168.1.2，虚拟机的ip为192.168.171.2，宿主机维护一张表，记录虚拟网卡每个端口对应哪个虚拟机，虚拟机但是对外通信时经过宿主机的虚拟网卡，展示的ip为192.168.1.2</p>
+<h6 id="snat-更改源地址"><a href="#snat-更改源地址" class="headerlink" title="snat: 更改源地址"></a>snat: 更改源地址</h6><h6 id="dnat-更改目的地址"><a href="#dnat-更改目的地址" class="headerlink" title="dnat: 更改目的地址"></a>dnat: 更改目的地址</h6><h4 id="host-only："><a href="#host-only：" class="headerlink" title="host-only："></a>host-only：</h4><p>跟nat模式相似，但是不能联网，只能与宿主机通信</p>
+<p>同一个局域网内，不同网段的ip是可以通信的，只要不做策略就可以</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/21/%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-iptables学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -713,329 +1036,9 @@ public void generateMarkdown() throws Exception&#123;
 
 
   
-    <article id="post-加密算法整理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/07/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/">加密算法整理</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/07/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/" class="archive-article-date">
-  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/07/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-单测学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/07/%E5%8D%95%E6%B5%8B%E5%AD%A6%E4%B9%A0/">单测学习</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/07/%E5%8D%95%E6%B5%8B%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/07/%E5%8D%95%E6%B5%8B%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-签名算法整理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/07/%E7%AD%BE%E5%90%8D%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/">签名算法整理</a>
-    </h1>
-  
-
-        
-        <a href="/2020/01/07/%E7%AD%BE%E5%90%8D%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/" class="archive-article-date">
-  	<time datetime="2020-01-06T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">密码相关</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/07/%E7%AD%BE%E5%90%8D%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-docker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/20/docker/">Docker学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/20/docker/" class="archive-article-date">
-  	<time datetime="2019-12-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于笔记本容量有限，装虚拟机会有些卡顿，稍微学习了一点docker基本操作。</p>
-<p>学习文档：<a target="_blank" rel="noopener" href="http://www.dockerinfo.net/document">http://www.dockerinfo.net/document</a></p>
-<p>docker：一种linux容器技术<br>image镜像：只读层，永远不会变<br>docker容器：镜像的一个运行实例，可读写</p>
-<p><strong>1. 从安装docker到创建容器并运行：</strong><br>brew cast install docker : 安装docker<br>docker search centos : 查找镜像<br>docker pull centos:7 : 若不指定版本号，则拉取最新版<br>docker rmi xxx : 以镜像id删除镜像<br>docker tag 860c279d2fec runoob/centos:dev  为镜像添加新标签<br>docker run –name xxx centos:7 /bin/echo “Hello world”<br>以 centos:7 镜像创建一个名为xxx（不指定名称会自动命名）的新容器，在容器里执行 bin/echo “Hello world”，然后输出结果。<br>当运行容器时，使用的镜像如果在本地中不存在，docker 就会自动从 docker 镜像仓库中下载，默认是从 Docker Hub 公共镜像源下载。<br>如果你不指定一个镜像的版本标签，例如你只使用 ubuntu，docker 将默认使用 ubuntu:latest 镜像。<br>docker run -i -t centos:7 /bin/bash : 运行交互式的容器，exit退出</p>
-<p>至此容器创建成功，exit退出后容器停止，已停止的容器可以继续运行，容器通过run创建之后一直存在，通过exec可进入<br>docker exec -it xxx-docker /bin/bash</p>
-<p><strong>2. 容器操作</strong><br>镜像id: 64位16进制字符串<br>容器id: 12位16进制字符串</p>
-<p>docker images : 查看所有已拉取镜像<br>docker ps : 查看正在运行的容器列表<br>docker ps -a : 查看已停止的容器列表<br>docker logs 8c6a896a71b5 : 查看该id的容器的标准输出<br>docker stop xxx : 以NAMES/id停止该容器<br>docker start xxx : 以NAMES/id运行该停止的容器<br>docker restart xxx : 以NAMES/id运行该正在进行的容器<br>docker rm xxx : 删除容器</p>
-<p><strong>3. 自定义镜像</strong></p>
-<ol>
-<li><p>通过commit创建<br>docker pull下来的只是基础镜像，基础镜像默认不改动，改动后可以通过commit 来进行镜像保存<br>docker run -i -t ubuntu:18.04 /bin/bash<br>//改动后exit，记住容器id<br>docker commit -m “change xxx” 容器id 新的镜像名:镜像版本<br>//之后新的镜像就制作完成<br>docker images<br>docker run -i -t 新的镜像名:镜像版本 /bin/bash</p>
-</li>
-<li><p>通过build创建，dockerfile<br>写一个dockerfile，文件无后缀<br>FROM ubuntu:18.04<br>MAINTAINER Docker Kilin<br>RUN apt update &amp;&amp; apt install -y xz-utils ca-certificates<br>WORKDIR /<br>COPY xxx .<br>RUN tar -xf xxx &amp;&amp; rm xxx<br>ENV PATH=”/xxx;${PATH}”<br>WORKDIR /xxx<br>CMD ‘/bin/bash’<br>docker build -t=’镜像名:版本’ dockerfile所在路径</p>
-</li>
-</ol>
-<p><strong>4. 文件传输</strong><br>docker容器向本机传送文件<br>docker cp container_id:docker容器内的文件全路径 本机保存文件的全路径<br>例如：docker cp 4a2f08d2c1f8:/data1/configure.txt E:\PHP\configure.txt</p>
-<p>本机向docker容器传送文件<br>docker cp 本机保存文件的全路径 container_id:docker容器内的文件全路径<br>例如：docker cp E:\PHP\configure.txt 4a2f08d2c1f8:/data1/configure.txt</p>
-<p><strong>5.  运行web应用</strong><br>docker pull training/webapp  # 载入镜像<br>docker run -d -P training/webapp python app.py<br>-d:让容器在后台运行。<br>-P:将容器内部使用的网络端口映射到我们使用的主机上。</p>
-<p><strong>6.  端口映射</strong><br>docker run -d -P citizenstig/dvwa   运行dvwa并将内部容器端口映射到本机端口<br>docker run -itd –cap-add NET_ADMIN -h xxx –name xxx -p 3128:3128 centos:vpn /bin/bash   将docker的3128端口映射到宿主机3128端口</p>
-<p>-h ：设置主机名</p>
-<p><strong>Tips:</strong></p>
-<ol>
-<li>docker build之后无法使用systemctl，但是可以通过直接进入/lib/systemd/system/目录中运行该程序</li>
-<li>宿主机通过与docker之间端口映射，映射之后宿主机配置代理，可以连接docker中的squid</li>
-<li>–cap-add NET_ADMIN   修改网络接口数据<br>不建议–privileged  不安全</li>
-<li>brew与brew cask区别：<br>brew 是从下载源码解压然后./configure &amp;&amp; make install,同时会包含相关依存库。并自动配置好各种环境变量，而且易于卸载。<br>而brew cask是已经编译好了的应用包(.dmg/.pkg). 仅仅是下载解压，放在统一的目录中(/opt/homebrew-cask/Caskroom), 省掉了自己去下载、解压、拖拽(安装)等蛋疼的步骤，同样，卸载相当容易与干净。</li>
-<li>docker可以配置squid代理，端口映射到宿主机，宿主机通过配置代理通过docker联网，但是squid不支持4层代理，可以通过socks代理解决这个问题，socks代理是4层代理，4层7层都支持</li>
-</ol>
-<p>Question：<br>docker和宿主机的网络什么关系，外部机器如何访问docker？</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/20/docker/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+      <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1047,7 +1050,7 @@ public void generateMarkdown() throws Exception&#123;
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 John Doe
+    		&copy; 2021 MiliTing
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
