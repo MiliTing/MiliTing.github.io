@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://example.com/2020/01/09/java%E5%BC%80%E5%8F%91bug%E9%9B%86%E5%90%88/index.html">
 <meta property="og:site_name" content="Fight For Fun">
 <meta property="og:description" content="1. 发邮件这种逻辑，一定要加频控，否则账号特别容易被封禁  频控逻辑：错误示范：去redis查(get)一个key，如果这个key不存在，则继续业务逻辑，并且将key写入redis(set)，写入时设置一个时效性错误原因：若存在多台机器，多个机器同时get一个值，虽然get操作是一个个来的，但是在写入新的值之前，有可能多个线程都获取了同一个值，重复进行业务逻辑正确写法：直接去redis写入一个k">
-<meta property="og:locale">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-08T16:00:00.000Z">
 <meta property="article:modified_time" content="2020-11-06T06:19:37.000Z">
 <meta property="article:author" content="MiliTing">
