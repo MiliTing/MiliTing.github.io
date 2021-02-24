@@ -152,6 +152,178 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-kafka的时序性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/24/kafka%E7%9A%84%E6%97%B6%E5%BA%8F%E6%80%A7/">kafka的时序性</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/24/kafka%E7%9A%84%E6%97%B6%E5%BA%8F%E6%80%A7/" class="archive-article-date">
+  	<time datetime="2021-02-24T12:03:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/24/kafka%E7%9A%84%E6%97%B6%E5%BA%8F%E6%80%A7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-flink的状态保存" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/23/flink%E7%9A%84%E7%8A%B6%E6%80%81%E4%BF%9D%E5%AD%98/">flink的状态保存</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/23/flink%E7%9A%84%E7%8A%B6%E6%80%81%E4%BF%9D%E5%AD%98/" class="archive-article-date">
+  	<time datetime="2021-02-23T07:59:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>State - 满足有状态的计算需求，是flink对持久化存储的抽象</p>
+<p>默认存储在java的堆内存中</p>
+<p><strong>分类：</strong></p>
+<ol>
+<li>Keyed State - 适用于数据计算过程中的状态存储，计数等<ol>
+<li>仅在keyedStream里面使用，每个state和key绑定</li>
+<li>只能从RuntimeContext提供的api中获取state，处理state的只能是RichFunction</li>
+<li>有6种，ValueState、ListState、MapState、AggregatingState、ReducingState、FoldingState</li>
+</ol>
+</li>
+<li>Nod-Keyed State - Operator State + Broadcast State<ol>
+<li>Operator State - 用于有状态的Source和sink开发，kafka等，用于operatoe执行期间的元数据存储，无法对数据进行keyBy的场景，与算子绑定</li>
+<li>Broadcast State - 用于单向，不同stream之间的消息传递（类似发布订阅）</li>
+</ol>
+</li>
+</ol>
+<p>过期：ttl</p>
+<p>Checkpoint机制：全局状态快照，容错，可以记录状态数据，即state</p>
+<p><strong>Flink的checkPoint状态管理之State Backend</strong></p>
+<p>默认情况下，state会保存在taskmanager的内存中，checkpoint会存储在JobManager的内存中。</p>
+<p>state 的store和checkpoint的位置取决于State Backend的配置</p>
+<p>env.setStateBackend(…)</p>
+<p>一共有三种State Backend</p>
+<p>​    MemoryStateBackend # 内存存储</p>
+<p>​    FsStateBackend # 文件系统存储</p>
+<p>​    RocksDBStateBackend # rocksDB是一个数据库</p>
+<p><strong>1、MemoryStateBackend</strong><br>将数据持久化状态存储到内存当中，state数据保存在java堆内存中，执行checkpoint的时候，会把state的快照数据保存到jobmanager的内存中。基于内存的state backend在生产环境下不建议使用</p>
+<p>代码配置：</p>
+<p>​    environment.setStateBackend(new MemoryStateBackend())</p>
+<p><strong>2、FsStateBackend</strong><br>state数据保存在taskmanager的内存中，执行checkpoint的时候，会把state的快照数据保存到配置的文件系统中。可以使用hdfs等分布式文件系统</p>
+<p>代码配置：</p>
+<p>​    environment.setStateBackend(new FsStateBackend(“hdfs://node01:8020”))</p>
+<p><strong>3、RocksDBStateBackend</strong><br>RocksDB介绍：RocksDB使用一套日志结构的数据库引擎，为了更好的性能，这套引擎是用C++编写的。 Key和value是任意大小的字节流。RocksDB跟上面的都略有不同，它会在本地文件系统中维护状态，state会直接写入本地rocksdb中。同时它需要配置一个远端的filesystem uri（一般是HDFS），在做checkpoint的时候，会把本地的数据直接复制到filesystem中。fail over的时候从filesystem中恢复到本地RocksDB克服了state受内存限制的缺点，同时又能够持久化到远端文件系统中，比较适合在生产中使用</p>
+<p>代码配置：导入jar包然后配置代码</p>
+<p><dependency> <groupId>org.apache.flink</groupId> <artifactId>flink-statebackend-rocksdb_2.11</artifactId> <version>1.8.1</version> </dependency></p>
+<p>配置代码</p>
+<p>​    environment.setStateBackend(new RocksDBStateBackend(“hdfs://node01:8020/flink/checkDir”,true))</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">flink</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/23/flink%E7%9A%84%E7%8A%B6%E6%80%81%E4%BF%9D%E5%AD%98/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-每天一个linux小命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -783,325 +955,6 @@
 
 
   
-    <article id="post-neo4j学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/13/neo4j%E5%AD%A6%E4%B9%A0/">neo4j语法学习</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/13/neo4j%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2020-12-13T12:06:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Neo4j 语法学习</p>
-<p>开源、无schema、无sql、图形数据库</p>
-<p><strong>节点 + 关系 + 属性</strong></p>
-<p><strong>使用场景</strong>：适合描述多层关系的数据，描述数据间的关系</p>
-<p>Neo4j图数据库遵循属性图模型来存储和管理其数据</p>
-<p><strong>属性图模型规则</strong></p>
-<ul>
-<li>表示节点，关系和属性中的数据</li>
-<li>节点和关系都包含属性</li>
-<li>关系连接节点</li>
-<li>属性是键值对</li>
-<li>节点用圆圈表示，关系用方向键表示。</li>
-<li>关系具有方向：单向和双向。</li>
-<li>每个关系包含“开始节点”或“从节点”和“到节点”或“结束节点”</li>
-</ul>
-<p>Neo4j图数据库主要有以下构建块 - </p>
-<ul>
-<li>节点</li>
-<li>属性：节点和关系都有属性，多个键值对</li>
-<li>关系</li>
-<li>标签：节点、关系都可以有1+个标签，存储在属性中</li>
-<li>数据浏览器：<a target="_blank" rel="noopener" href="http://localhost:7474/browser/">http://localhost:7474/browser/</a></li>
-</ul>
-<p><strong>查询语句 - CQL (Cypher查询语句)</strong></p>
-<ul>
-<li>它是Neo4j图形数据库的查询语言。</li>
-<li>它是一种声明性模式匹配语言</li>
-<li>它遵循SQL语法。</li>
-<li>它的语法是非常简单且人性化、可读的格式。</li>
-</ul>
-<h3 id="CREATE命令语法"><a href="#CREATE命令语法" class="headerlink" title="CREATE命令语法"></a>CREATE命令语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE (&lt;node-name&gt;:&lt;label-name&gt;)</span><br><span class="line">CREATE (&lt;node-name&gt;:&lt;label-name1&gt;:&lt;label-name2&gt;.....:&lt;label-namen&gt;)</span><br><span class="line">节点的标签可以有多个</span><br><span class="line">CREATE (dept:Dept)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE (</span><br><span class="line">   &lt;node-name&gt;:&lt;label-name&gt;</span><br><span class="line">   &#123; 	</span><br><span class="line">      &lt;Property1-name&gt;:&lt;Property1-Value&gt;</span><br><span class="line">      ........</span><br><span class="line">      &lt;Propertyn-name&gt;:&lt;Propertyn-Value&gt;</span><br><span class="line">   &#125;</span><br><span class="line">)</span><br><span class="line">关系的标签只有一个（待验证）</span><br><span class="line">CREATE (dept:Dept &#123; deptno:10,dname:&quot;Accounting&quot;,location:&quot;Hyderabad&quot; &#125;)</span><br></pre></td></tr></table></figure>
-
-<h2 id="MATCH-命令语法："><a href="#MATCH-命令语法：" class="headerlink" title="MATCH 命令语法："></a>MATCH 命令语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MATCH </span><br><span class="line">(</span><br><span class="line">   &lt;node-name&gt;:&lt;label-name&gt;</span><br><span class="line">)</span><br><span class="line">一般和return语句结合使用</span><br></pre></td></tr></table></figure>
-
-<h2 id="RETURN命令语法："><a href="#RETURN命令语法：" class="headerlink" title="RETURN命令语法："></a>RETURN命令语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RETURN </span><br><span class="line">   &lt;node-name&gt;.&lt;property1-name&gt;,</span><br><span class="line">   ...</span><br><span class="line">   &lt;node-name&gt;.&lt;propertyn-name&gt;</span><br><span class="line">一般和match语句结合使用</span><br></pre></td></tr></table></figure>
-
-<h2 id="MATCH-RETURN命令语法："><a href="#MATCH-RETURN命令语法：" class="headerlink" title="MATCH RETURN命令语法："></a>MATCH RETURN命令语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MATCH Command</span><br><span class="line">RETURN Command</span><br></pre></td></tr></table></figure>
-
-<h2>创建关系：</h2>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">MATCH (&lt;node1-label-name&gt;:&lt;node1-name&gt;),(&lt;node2-label-name&gt;:&lt;node2-name&gt;)</span><br><span class="line">CREATE  </span><br><span class="line">	(&lt;node1-label-name&gt;)-[&lt;relationship-label-name&gt;:&lt;relationship-name&gt;</span><br><span class="line">	&#123;&lt;define-properties-list&gt;&#125;]-&gt;(&lt;node2-label-name&gt;)</span><br><span class="line">RETURN &lt;relationship-label-name&gt;</span><br><span class="line"></span><br><span class="line">对已有节点创建关系：</span><br><span class="line">MATCH (cust:Customer),(cc:CreditCard) </span><br><span class="line">CREATE (cust)-[r:DO_SHOPPING_WITH&#123;shopdate:&quot;12&#x2F;12&#x2F;2014&quot;,price:55000&#125;]-&gt;(cc) </span><br><span class="line">RETURN r</span><br><span class="line"></span><br><span class="line">对新节点创建关系：</span><br><span class="line">CREATE (video1:YoutubeVideo1&#123;title:&quot;Action Movie1&quot;,updated_by:&quot;Abc&quot;,uploaded_date:&quot;10&#x2F;10&#x2F;2010&quot;&#125;)</span><br><span class="line">-[movie:ACTION_MOVIES&#123;rating:1&#125;]-&gt;</span><br><span class="line">(video2:YoutubeVideo2&#123;title:&quot;Action Movie2&quot;,updated_by:&quot;Xyz&quot;,uploaded_date:&quot;12&#x2F;12&#x2F;2012&quot;&#125;) </span><br><span class="line"></span><br><span class="line">检索关系节点的详细信息：</span><br><span class="line">MATCH (cust)-[r:DO_SHOPPING_WITH]-&gt;(cc) </span><br><span class="line">RETURN cust,cc</span><br></pre></td></tr></table></figure>
-
-<h2 id="复杂WHERE子句语法"><a href="#复杂WHERE子句语法" class="headerlink" title="复杂WHERE子句语法"></a>复杂WHERE子句语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">WHERE &lt;condition&gt; &lt;boolean-operator&gt; &lt;condition&gt;</span><br><span class="line"></span><br><span class="line">MATCH (emp:Employee) </span><br><span class="line">WHERE emp.name &#x3D; &#39;Abc&#39; OR emp.name &#x3D; &#39;Xyz&#39;</span><br><span class="line">RETURN emp</span><br></pre></td></tr></table></figure>
-
-<h2 id="DELETE语法"><a href="#DELETE语法" class="headerlink" title="DELETE语法"></a>DELETE语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DELETE &lt;node1-name&gt;,&lt;node2-name&gt;,&lt;relationship-name&gt;</span><br><span class="line"></span><br><span class="line">MATCH (e: Employee) DELETE e</span><br></pre></td></tr></table></figure>
-
-<h2 id="REMOVE语法"><a href="#REMOVE语法" class="headerlink" title="REMOVE语法"></a>REMOVE语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">REMOVE &lt;property-name-list&gt;</span><br><span class="line">REMOVE &lt;label-name-list&gt; </span><br><span class="line"></span><br><span class="line">MATCH (book &#123; id:122 &#125;)</span><br><span class="line">REMOVE book.price</span><br><span class="line">RETURN book</span><br><span class="line"></span><br><span class="line">MATCH (m:Movie) </span><br><span class="line">REMOVE m:Picture</span><br></pre></td></tr></table></figure>
-
-<p>**Neo4j CQL DELETE和REMOVE命令之间的主要区别 - **</p>
-<ul>
-<li>DELETE操作用于删除节点和关联关系。</li>
-<li>REMOVE操作用于删除标签和属性。</li>
-</ul>
-<p>**Neo4j CQL DELETE和REMOVE命令之间的相似性 - **</p>
-<ul>
-<li>这两个命令不应单独使用。</li>
-<li>两个命令都应该与MATCH命令一起使用。</li>
-</ul>
-<h2 id="SET子句语法"><a href="#SET子句语法" class="headerlink" title="SET子句语法"></a>SET子句语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SET  &lt;property-name-list&gt;</span><br><span class="line"></span><br><span class="line">MATCH (book:Book)</span><br><span class="line">SET book.title &#x3D; &#39;superstar&#39;</span><br><span class="line">RETURN book</span><br></pre></td></tr></table></figure>
-
-<h2 id="ORDER-BY子句语法"><a href="#ORDER-BY子句语法" class="headerlink" title="ORDER BY子句语法"></a>ORDER BY子句语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ORDER BY  &lt;property-name-list&gt;  [DESC]	 </span><br><span class="line"></span><br><span class="line">MATCH (emp:Employee)</span><br><span class="line">RETURN emp.empid,emp.name,emp.salary,emp.deptno</span><br><span class="line">ORDER BY emp.name DESC</span><br></pre></td></tr></table></figure>
-
-<h3 id="UNION子句语法"><a href="#UNION子句语法" class="headerlink" title="UNION子句语法"></a>UNION子句语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">它将两组结果中的公共行组合并返回到一组结果中。 它不从两个节点返回重复的行。</span><br><span class="line"></span><br><span class="line">&lt;MATCH Command1&gt;</span><br><span class="line">   UNION</span><br><span class="line">&lt;MATCH Command2&gt;</span><br><span class="line"></span><br><span class="line">MATCH (cc:CreditCard)</span><br><span class="line">RETURN cc.id as id,cc.number as number,cc.name as name,</span><br><span class="line">   cc.valid_from as valid_from,cc.valid_to as valid_to</span><br><span class="line">UNION</span><br><span class="line">MATCH (dc:DebitCard)</span><br><span class="line">RETURN dc.id as id,dc.number as number,dc.name as name,</span><br><span class="line">   dc.valid_from as valid_from,dc.valid_to as valid_to</span><br></pre></td></tr></table></figure>
-
-<h2 id="UNION-ALL子句"><a href="#UNION-ALL子句" class="headerlink" title="UNION ALL子句"></a>UNION ALL子句</h2><p>它结合并返回两个结果集的所有行成一个单一的结果集。它还返回由两个节点重复行。</p>
-<h3 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h3><p>结果列类型，并从两个结果集的名字必须匹配，这意味着列名称应该是相同的，列的数据类型应该是相同的。</p>
-<h3 id="UNION-ALL子句语法"><a href="#UNION-ALL子句语法" class="headerlink" title="UNION ALL子句语法"></a>UNION ALL子句语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;MATCH Command1&gt;</span><br><span class="line">UNION ALL</span><br><span class="line">&lt;MATCH Command2&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="LIMIT子句语法"><a href="#LIMIT子句语法" class="headerlink" title="LIMIT子句语法"></a>LIMIT子句语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LIMIT &lt;number&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="SKIP子句语法（忽略前几行）："><a href="#SKIP子句语法（忽略前几行）：" class="headerlink" title="SKIP子句语法（忽略前几行）："></a>SKIP子句语法（忽略前几行）：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SKIP &lt;number&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Neo4j-CQL-MERGE语法"><a href="#Neo4j-CQL-MERGE语法" class="headerlink" title="Neo4j CQL MERGE语法"></a>Neo4j CQL MERGE语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MERGE &#x3D; CREATE + MATCH</span><br><span class="line">Neo4j CQL MERGE命令在图中搜索给定模式，如果存在，则返回结果</span><br><span class="line">如果它不存在于图中，则它创建新的节点&#x2F;关系并返回结果。</span><br><span class="line"></span><br><span class="line">MERGE (&lt;node-name&gt;:&lt;label-name&gt;</span><br><span class="line">&#123;</span><br><span class="line">   &lt;Property1-name&gt;:&lt;Pro&lt;rty1-Value&gt;</span><br><span class="line">   .....</span><br><span class="line">   &lt;Propertyn-name&gt;:&lt;Propertyn-Value&gt;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<h2 id="IN操作符语法"><a href="#IN操作符语法" class="headerlink" title="IN操作符语法"></a>IN操作符语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">IN[&lt;Collection-of-values&gt;]</span><br><span class="line"></span><br><span class="line">MATCH (e:Employee) </span><br><span class="line">WHERE e.id IN [123,124]</span><br><span class="line">RETURN e.id,e.name,e.sal,e.deptno</span><br></pre></td></tr></table></figure>
-
-<h1 id="ID属性"><a href="#ID属性" class="headerlink" title="ID属性"></a>ID属性</h1><p>在Neo4j中，“Id”是节点和关系的默认内部属性。 这意味着，当我们创建一个新的节点或关系时，Neo4j数据库服务器将为内部使用分配一个数字。 它会自动递增。</p>
-<h1 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h1><table>
-<thead>
-<tr>
-<th>S.No.</th>
-<th>功能</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1。</td>
-<td>UPPER</td>
-<td>它用于将所有字母更改为大写字母。</td>
-</tr>
-<tr>
-<td>2。</td>
-<td>LOWER</td>
-<td>它用于将所有字母改为小写字母。</td>
-</tr>
-<tr>
-<td>3。</td>
-<td>SUBSTRING</td>
-<td>它用于获取给定String的子字符串。</td>
-</tr>
-<tr>
-<td>4。</td>
-<td>REPLACE</td>
-<td>它用于替换一个字符串的子字符串。</td>
-</tr>
-</tbody></table>
-<h1 id="AGGREGATION聚合"><a href="#AGGREGATION聚合" class="headerlink" title="AGGREGATION聚合"></a>AGGREGATION聚合</h1><table>
-<thead>
-<tr>
-<th>S.No.</th>
-<th>聚集功能</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1。</td>
-<td>COUNT</td>
-<td>它返回由MATCH命令返回的行数。</td>
-</tr>
-<tr>
-<td>2。</td>
-<td>MAX</td>
-<td>它从MATCH命令返回的一组行返回最大值。</td>
-</tr>
-<tr>
-<td>3。</td>
-<td>MIN</td>
-<td>它返回由MATCH命令返回的一组行的最小值。</td>
-</tr>
-<tr>
-<td>4。</td>
-<td>SUM</td>
-<td>它返回由MATCH命令返回的所有行的求和值。</td>
-</tr>
-<tr>
-<td>5。</td>
-<td>AVG</td>
-<td>它返回由MATCH命令返回的所有行的平均值。</td>
-</tr>
-</tbody></table>
-<h1 id="关系函数"><a href="#关系函数" class="headerlink" title="关系函数"></a>关系函数</h1><table>
-<thead>
-<tr>
-<th>S.No.</th>
-<th>功能</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1。</td>
-<td>STARTNODE</td>
-<td>它用于知道关系的开始节点。</td>
-</tr>
-<tr>
-<td>2。</td>
-<td>ENDNODE</td>
-<td>它用于知道关系的结束节点。</td>
-</tr>
-<tr>
-<td>3。</td>
-<td>ID</td>
-<td>它用于知道关系的ID。</td>
-</tr>
-<tr>
-<td>4。</td>
-<td>TYPE</td>
-<td>它用于知道字符串表示中的一个关系的TYPE。</td>
-</tr>
-</tbody></table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/13/neo4j%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-guava" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/11/guava/">guava库</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/11/guava/" class="archive-article-date">
-  	<time datetime="2020-12-11T14:40:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Google提出，对java Collection进行扩展以提高开发效率</p>
-<p>写法很方便，推荐使用</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 初始化集合</span><br><span class="line">	List&lt;String&gt; list = Lists.newArrayList(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>);</span><br><span class="line"><span class="number">2.</span> 读取文件内容</span><br><span class="line">	List&lt;String&gt; lines = Files.readLines(file, Charsets.UTF_8);</span><br><span class="line"><span class="number">3.</span> 统计元素出现次数</span><br><span class="line">  Multiset&lt;String&gt; multiset = HashMultiset.create();</span><br><span class="line">  multiset.add(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">  multiset.add(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">  multiset.add(<span class="string">&quot;b&quot;</span>, <span class="number">5</span>);<span class="comment">//add &quot;b&quot; 5 times</span></span><br><span class="line">  System.out.println(multiset.elementSet());<span class="comment">//[a, b]</span></span><br><span class="line">  System.out.println(multiset.count(<span class="string">&quot;a&quot;</span>));<span class="comment">//2</span></span><br><span class="line">  System.out.println(multiset.count(<span class="string">&quot;b&quot;</span>));<span class="comment">//5</span></span><br><span class="line">  System.out.println(multiset.count(<span class="string">&quot;c&quot;</span>));<span class="comment">//0</span></span><br><span class="line"><span class="number">4.</span> Map&lt;K, List&lt;V&gt;&gt; Map&lt;K, Set&lt;V&gt;&gt;</span><br><span class="line">  Multimap&lt;String, Integer&gt; multimap = ArrayListMultimap.create();</span><br><span class="line">  multimap.put(<span class="string">&quot;a&quot;</span>, <span class="number">1</span>);</span><br><span class="line">  multimap.put(<span class="string">&quot;a&quot;</span>, <span class="number">2</span>);</span><br><span class="line">  multimap.put(<span class="string">&quot;a&quot;</span>, <span class="number">4</span>);</span><br><span class="line">  multimap.put(<span class="string">&quot;b&quot;</span>, <span class="number">3</span>);</span><br><span class="line">  multimap.put(<span class="string">&quot;c&quot;</span>, <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">  System.out.println(multimap.keys());<span class="comment">//[a x 3, b, c]</span></span><br><span class="line">  System.out.println(multimap.get(<span class="string">&quot;a&quot;</span>));<span class="comment">//[1 ,2, 4]</span></span><br><span class="line">  System.out.println(multimap.get(<span class="string">&quot;b&quot;</span>));<span class="comment">//[3]</span></span><br><span class="line">  System.out.println(multimap.get(<span class="string">&quot;c&quot;</span>));<span class="comment">//[5]</span></span><br><span class="line">  System.out.println(multimap.get(<span class="string">&quot;d&quot;</span>));<span class="comment">//[]</span></span><br><span class="line"></span><br><span class="line">  System.out.println(multimap.asMap());<span class="comment">//&#123;a=[1, 2, 4], b=[3], c=[5]&#125;</span></span><br></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/11/guava/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1216,6 +1069,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">密码相关</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">flink</a>
               </li>
             
             <div class="clearfix"></div>
