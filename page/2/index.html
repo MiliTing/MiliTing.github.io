@@ -152,6 +152,352 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-removeAll踩坑记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/04/removeAll%E8%B8%A9%E5%9D%91%E8%AE%B0/">removeAll踩坑记</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/04/removeAll%E8%B8%A9%E5%9D%91%E8%AE%B0/" class="archive-article-date">
+  	<time datetime="2021-01-04T12:10:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2>坑点一：</h2>
+
+<p>ArrayList1.removeAll(ArrayList2) 当两个list数量级达到百万时，处理过程长达5小时</p>
+<p><strong>原因：</strong></p>
+<p>HashSet、LinkedList、ArrayList中，ArrayList自行实现了removeAll方法</p>
+<p><strong>原理：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.将list中不删除的元素移到数组前面（我们知道ArrayList的底层是数组实现）</span></span><br><span class="line"><span class="keyword">int</span> w=<span class="number">0</span>; <span class="comment">//w为不删除和要删除的分界线</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> value in 该list的底层数组)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!subList.contain(value))&#123;</span><br><span class="line">        该list的底层数组[w]=value;</span><br><span class="line">        w++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//2.将w后面的元素全部置为null</span></span><br><span class="line">xxx</span><br></pre></td></tr></table></figure>
+
+<p>contain方法最耗时。</p>
+<h3>HashSet.contains() vs ArrayList.contains()速度比较</h3>
+
+<p><strong>ArrayList.contains()</strong><br>    实现很简单，即调用indexOf()，一个一个地遍历查找。最坏时间复杂度为O(总数据量)。</p>
+<p><strong>HashSet.contains()</strong><br>    我们知道，HashSet的底层是HashMap，因此，实际也就是调用map.containKey()方法。</p>
+<p>大家都知道，HashMap的查找速度非常快！</p>
+<p>因此，到这里，我们也就解释题目的问题。同时也知道了，在数据量比较大的的情况下，使用arrayList.removeAll(subList)时，可以更改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">将subList封装为HashSet：arrayList.removeAll(<span class="keyword">new</span> HashSet(subList))</span><br><span class="line">将arrayList改为LinkedList：<span class="keyword">new</span> LinkedList(arrayList).removeAll(subList)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2>坑点二：</h2>
+
+<p><strong>removeAll报错：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Long&gt; ids1 = Arrays.asList(<span class="number">1L</span>, <span class="number">3L</span>, <span class="number">2L</span>);</span><br><span class="line">List&lt;Long&gt; ids2 = Collections.singletonList(<span class="number">2L</span>);</span><br><span class="line">List&lt;Long&gt; ids3 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">ids3.add(<span class="number">1L</span>);</span><br><span class="line">ids3.add(<span class="number">2L</span>);</span><br><span class="line">List&lt;Long&gt; ids = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">ids.add(<span class="number">2L</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;==== 001&quot;</span>);</span><br><span class="line">ids1.removeAll(ids); <span class="comment">// 这一步会报错</span></span><br><span class="line">System.out.println(<span class="string">&quot;==== 002&quot;</span>);</span><br><span class="line">ids2.removeAll(ids); <span class="comment">// 这一步也会报错</span></span><br><span class="line">System.out.println(<span class="string">&quot;==== 003&quot;</span>);</span><br><span class="line">ids3.removeAll(ids);</span><br></pre></td></tr></table></figure>
+
+<p><strong>原理：</strong></p>
+<ol>
+<li>Arrays.asList 返回的List是自己内部实现的ArrayList 而不是util下的ArrayList对象，调用removeAll方法的时候，会调用AbstractList的父类AbstractCollection的removeAll方法，ArrayList是数组 在循环的时候删除元素 一定会出现问题</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span> </span>&#123;</span><br><span class="line">       Objects.requireNonNull(c);</span><br><span class="line">       <span class="keyword">boolean</span> modified = <span class="keyword">false</span>;</span><br><span class="line">       Iterator&lt;?&gt; it = iterator();</span><br><span class="line">       <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">           <span class="keyword">if</span> (c.contains(it.next())) &#123;</span><br><span class="line">               it.remove();</span><br><span class="line">               modified = <span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> modified;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Collections.singletonList的返回值SingletonSet也是自己的内部类， 同样会调用AbstractCollection的removeAll方法</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/04/removeAll%E8%B8%A9%E5%9D%91%E8%AE%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-java异步编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/28/java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">java异步编程</a>
+    </h1>
+  
+
+        
+        <a href="/2020/12/28/java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" class="archive-article-date">
+  	<time datetime="2020-12-28T12:57:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java异步编程</p>
+<p> <strong>没有特殊说明时，一个类默认是非线程安全的。</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">interface</th>
+<th align="left">non-thread-safe</th>
+<th align="left">thread-safe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">List</td>
+<td align="left">ArrayList</td>
+<td align="left">CopyOnWriteArrayList</td>
+</tr>
+<tr>
+<td align="left">Map</td>
+<td align="left">HashMap</td>
+<td align="left">ConcurrentHashMap</td>
+</tr>
+<tr>
+<td align="left">Set</td>
+<td align="left">HashSet / TreeSet</td>
+<td align="left">CopyOnWriteArraySet / ConcurrentHashSet</td>
+</tr>
+<tr>
+<td align="left">Queue</td>
+<td align="left">ArrayDeque / LinkedList</td>
+<td align="left">ArrayBlockingQueue / LinkedBlockingQueue</td>
+</tr>
+<tr>
+<td align="left">Deque</td>
+<td align="left">ArrayDeque / LinkedList</td>
+<td align="left">LinkedBlockingDeque</td>
+</tr>
+</tbody></table>
+<p><strong>线程安全集合转换器:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map threadSafeMap = Collections.synchronizedMap(<span class="keyword">new</span> HashMap());</span><br><span class="line"></span><br><span class="line">实际上是用一个包装类包装了非线程安全的Map，然后对所有读写方法都用<span class="keyword">synchronized</span>加锁，这样获得的线程安全集合的性能比java.util.concurrent集合要低很多，所以不推荐使用。</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>创建线程：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Thread t = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line">System.out.println(<span class="string">&quot;start&quot;</span>);</span><br><span class="line">t.start();</span><br><span class="line"><span class="comment">//等待线程结束，join(long)的重载方法也可以指定一个等待时间</span></span><br><span class="line">t.join(); </span><br><span class="line"><span class="comment">//对线程发出中断信号，此时在线程内调用isInterrupted()为true</span></span><br><span class="line">t.interrupt();</span><br></pre></td></tr></table></figure>
+
+<p><strong>Volalite:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">线程间共享变量需要使用 <span class="keyword">volatile</span> 关键字标记</span><br><span class="line"><span class="keyword">volatile</span> 关键字的目的是告诉虚拟机：</span><br><span class="line">- 每次访问变量时，总是获取主内存的最新值；</span><br><span class="line">- 每次修改变量后，立刻回写到主内存。</span><br><span class="line"></span><br><span class="line">ps：Java的内存模型。在Java虚拟机中，变量的值保存在主内存中，但是，当线程访问变量时，它会先获取一个副本，并保存在自己的工作内存中。如果线程修改了变量的值，虚拟机会在某个时刻把修改后的值回写到主内存，但是，这个时间是不确定的！</span><br></pre></td></tr></table></figure>
+
+<p><strong>守护线程：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">t.setDaemon(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">守护线程是为其他线程服务的线程；</span><br><span class="line">所有非守护线程都执行完毕后，虚拟机退出；</span><br><span class="line">守护线程不能持有需要关闭的资源（如打开文件等）</span><br></pre></td></tr></table></figure>
+
+<p><strong>synchronized:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">加锁和解锁的目的：保证一段代码的原子性</span><br><span class="line">同步的本质就是给指定对象加锁，加锁后才能继续执行后续代码；</span><br><span class="line">注意加锁对象必须是同一个实例；</span><br><span class="line">对JVM定义的单个原子操作不需要同步。</span><br><span class="line">  原子操作：</span><br><span class="line">    基本类型（<span class="keyword">long</span>和<span class="keyword">double</span>除外）赋值，例如：<span class="keyword">int</span> n = m；</span><br><span class="line">    引用类型赋值，例如：List&lt;String&gt; list = anotherList。</span><br><span class="line">  </span><br><span class="line">如何使用<span class="keyword">synchronized</span>：</span><br><span class="line">  找出修改共享变量的线程代码块；</span><br><span class="line">  选择一个共享实例作为锁；</span><br><span class="line">  使用 <span class="keyword">synchronized</span> (lockObject) &#123; ... &#125;。</span><br><span class="line">  </span><br><span class="line">加锁后效率降低，谨慎加锁</span><br><span class="line"></span><br><span class="line">用<span class="keyword">synchronized</span>修饰方法可以把整个方法变为同步代码块，<span class="keyword">synchronized</span>方法加锁对象是<span class="keyword">this</span>；</span><br></pre></td></tr></table></figure>
+
+<p><strong>可重入锁：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Java的线程锁是可重入的锁</span><br><span class="line">一个线程可以重复获取同一个锁</span><br></pre></td></tr></table></figure>
+
+<p><strong>死锁：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">两个线程各自持有不同的锁，然后各自试图获取对方手里的锁，造成了双方无限等待下去</span><br><span class="line">避免方法：线程获取锁的顺序要一致。即严格按照先获取lockA，再获取lockB的顺序</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>wait</code>和<code>notify</code>用于多线程协调运行：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- 在 <span class="keyword">synchronized</span> 内部可以调用 wait() 使线程进入等待状态；</span><br><span class="line">- 必须在已获得的锁对象上调用 wait() 方法；</span><br><span class="line">- 在 <span class="keyword">synchronized</span> 内部可以调用 notify() 或 notifyAll() 唤醒其他等待线程；</span><br><span class="line">- 必须在已获得的锁对象上调用 notify() 或 notifyAll() 方法；</span><br><span class="line">- wait()方法调用时，会释放线程获得的锁，wait()方法返回后，线程又会重新试图获得锁</span><br></pre></td></tr></table></figure>
+
+<p><strong>乐观锁 / 悲观锁</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">乐观锁: </span><br><span class="line">	乐观地估计读的过程中大概率不会有写入</span><br><span class="line">悲观锁:</span><br><span class="line">	读的过程中拒绝有写入，也就是写入必须等待</span><br><span class="line">    </span><br><span class="line">显然乐观锁的并发效率更高，但一旦有小概率的写入导致读取的数据不一致，需要能检测出来，再读一遍就行。</span><br></pre></td></tr></table></figure>
+
+<p><strong>ReentrantLock</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">java.util.concurrent</span><br><span class="line">ReentrantLock 可以替代 <span class="keyword">synchronized</span> 进行同步；</span><br><span class="line">ReentrantLock 获取锁更安全；</span><br><span class="line">必须先获取到锁，再进入 <span class="keyword">try</span> &#123;...&#125; 代码块，最后使用 <span class="keyword">finally</span> 保证释放锁；</span><br><span class="line">可以使用 tryLock() 尝试获取锁。</span><br><span class="line">  </span><br><span class="line"><span class="keyword">synchronized</span> + wait + notify</span><br><span class="line">  等价于</span><br><span class="line">ReentrantLock + condition.await + condition.signalAll</span><br><span class="line">  </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Condition condition = lock.newCondition();</span><br></pre></td></tr></table></figure>
+
+<p><strong>ReadWriteLock</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- 使用`ReadWriteLock`可以提高读取效率：</span><br><span class="line">- `ReadWriteLock`只允许一个线程写入；</span><br><span class="line">- `ReadWriteLock`允许多个线程在没有写入时同时读取；</span><br><span class="line">- `ReadWriteLock`适合读多写少的场景。</span><br></pre></td></tr></table></figure>
+
+<p><strong>StampedLock</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">StampedLock 提供了乐观读锁，可取代 ReadWriteLock 以进一步提升并发性能；</span><br><span class="line">StampedLock 是不可重入锁。</span><br></pre></td></tr></table></figure>
+
+<p><strong>线程池：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- `JDK提供了`ExecutorService`实现了线程池功能：</span><br><span class="line">- 线程池内部维护一组线程，可以高效执行大量小任务；</span><br><span class="line">- `Executors`提供了静态方法创建不同类型的`ExecutorService`；</span><br><span class="line">- 必须调用`shutdown()`关闭`ExecutorService`；</span><br><span class="line">- `ScheduledThreadPool`可以定期调度多个任务。</span><br></pre></td></tr></table></figure>
+
+<p><strong>Future:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">实现Runnable/Callable接口，可以使用线程池执行任务，Callable接口返回Future对象</span><br><span class="line"></span><br><span class="line">- `Future&lt;V&gt;`接口表示一个未来可能会返回的结果，它定义的方法有：</span><br><span class="line">- `get()`：获取结果（会阻塞，直到结果返回）</span><br><span class="line">- `get(<span class="keyword">long</span> timeout, TimeUnit unit)`：获取结果，但只等待指定的时间；</span><br><span class="line">- `cancel(<span class="keyword">boolean</span> mayInterruptIfRunning)`：取消当前任务；</span><br><span class="line">- `isDone()`：判断任务是否已完成。</span><br></pre></td></tr></table></figure>
+
+<p><strong>CompletableFuture</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- `CompletableFuture`可以指定异步处理流程：</span><br><span class="line">- `thenAccept()`处理正常结果；</span><br><span class="line">- `exceptional()`处理异常结果；</span><br><span class="line">- `thenApplyAsync()`用于串行化另一个`CompletableFuture`；</span><br><span class="line">- `anyOf()`和`allOf()`用于并行化多个`CompletableFuture`。</span><br></pre></td></tr></table></figure>
+
+<p>Fork/Join是一种基于“分治”的算法：通过分解任务，并行执行，最后合并结果得到最终结果。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/12/28/java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-consul" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/13/consul/">consul</a>
+    </h1>
+  
+
+        
+        <a href="/2020/12/13/consul/" class="archive-article-date">
+  	<time datetime="2020-12-13T12:54:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>Consul是什么</strong><br>Consul是一个分布式高可用的系统，包含多个组件，但是作为一个整体，为你的基础设施提供服务发现和服务配置的工具。他提供以下关键特性:</p>
+<p><strong>服务发现</strong> </p>
+<p>Consul的客户端可用提供一个服务,比如 api 或者mysql ,另外一些客户端可用使用Consul去发现一个指定服务的提供者.通过DNS或者HTTP应用程序可用很容易的找到他所依赖的服务.</p>
+<p><strong>健康检查</strong> </p>
+<p>Consul客户端可用提供任意数量的健康检查,指定一个服务(比如:webserver是否返回了200 OK 状态码)或者使用本地节点(比如:内存使用是否大于90%). 这个信息可由operator用来监视集群的健康.被服务发现组件用来避免将流量发送到不健康的主机.</p>
+<p><strong>Key/Value存储</strong> </p>
+<p>应用程序可用根据自己的需要使用Consul的层级的Key/Value存储.比如动态配置,功能标记,协调,领袖选举等等,简单的HTTP API让他更易于使用.</p>
+<p><strong>多数据中心</strong></p>
+<p> Consul支持开箱即用的多数据中心.这意味着用户不需要担心需要建立额外的抽象层让业务扩展到多个区域.</p>
+<p>Consul面向DevOps和应用开发者友好.是他适合现代的弹性的基础设施.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/12/13/consul/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-neo4j学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -847,239 +1193,9 @@
 
 
   
-    <article id="post-logrotate" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/11/logrotate/">logrotate</a>
-    </h1>
-  
-
-        
-        <a href="/2020/12/11/logrotate/" class="archive-article-date">
-  	<time datetime="2020-12-11T11:52:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/11/logrotate/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-aop-intercepter-filter-区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/17/aop-intercepter-filter-%E5%8C%BA%E5%88%AB/">aop intercepter filter 区别</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/17/aop-intercepter-filter-%E5%8C%BA%E5%88%AB/" class="archive-article-date">
-  	<time datetime="2020-03-16T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/17/aop-intercepter-filter-%E5%8C%BA%E5%88%AB/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-elasticsearch的工作流程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/13/elasticsearch%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/">Elasticsearch的工作流程</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/13/elasticsearch%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" class="archive-article-date">
-  	<time datetime="2020-03-12T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>为什么用es？es倒排快</p>
-<p>正排: 文档id到内容、单词的关联<br>倒排: 单词到文档id的关联</p>
-<p>全文检索：先创建索引，然后根据索引来进行搜索的过程。</p>
-<p>全文检索的流程：索引流程、搜索流程<br>索引流程：采集数据 -&gt; 文档处理 -&gt; 存储到索引库中<br>搜索流程：输入查询条件 -&gt; 通过lucene的查询器查询索引 -&gt; 从索引库中取出结 -&gt; 视图渲染（Lucene本身不能进行视图渲染）</p>
-<p>elasticsearch 工作的一般流程：</p>
-<ol>
-<li>采集数据—&gt;构建文档对象—&gt;创建索引(将文档写入索引库采集数据，将数据转换成Lucene文档，将文档写入索引库，分词，创建索引)</li>
-<li>查询，先倒排索引，获取文档id</li>
-<li>再通过文档id正排索引，找到完整内容</li>
-<li>返回结果</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/13/elasticsearch%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1195,6 +1311,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">flink</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">密码学</a>
               </li>
             
             <div class="clearfix"></div>
