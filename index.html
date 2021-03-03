@@ -262,7 +262,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p><strong>MaxGCPauseMillis：</strong><br>    每次年轻代垃圾回收的最长时间(最大暂停时间)<br><strong>ParallelGCThreads：</strong><br>    并行收集器的线程数<br><strong>InitiatingHeapOccupancyPercent：</strong><br>    设置触发标记周期的 Java 堆占用率阈值。默认占用率是整个 Java 堆的 45%。就是说当使用内存占到堆总大小的45%的时候，G1将开始并发标记阶段。为混合GC做准备，这个数值在测试的时候我想让混合GC晚一些处理所以设定成了70%，经过观察发现如果这个数值设定过大会导致JVM无法启动并发标记，直接进行FullGC处理。G1的FullGC是单线程，一个22G的对GC完成需要8S的时间，所以这个值在调优的时候写的45%<br><strong>OmitStackTraceInFastThrow：</strong><br>    HotSpot VM专门针对异常做的一个优化，称为fast throw，当一些异常在代码里某个特定位置被抛出很多次的话，HotSpot Server Compiler（C2）会用fast throw来优化这个抛出异常的地方，直接抛出一个事先分配好的、类型匹配的对象，这个对象的message和stack trace都被清空。<br><strong>ParallelRefProcEnabled：</strong><br>    尽可能启用并行引用处理</p>
+<p><strong>调优参考</strong><br><a target="_blank" rel="noopener" href="https://www.oracle.com/technical-resources/articles/java/g1gc.html">https://www.oracle.com/technical-resources/articles/java/g1gc.html</a><br><a target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/javase/vmoptions-jsp.html">https://www.oracle.com/java/technologies/javase/vmoptions-jsp.html</a></p>
+<p><strong>推荐配置：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">8C8G 规格实例</span><br><span class="line">-Xmx6G -Xms6G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">8</span> -XX:ConcGCThreads=<span class="number">2</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">50</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line">8C12G 规格实例</span><br><span class="line">-Xmx8G -Xms8G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">8</span> -XX:ConcGCThreads=<span class="number">2</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">45</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line">8C16G 规格实例</span><br><span class="line">-Xmx12G -Xms12G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">8</span> -XX:ConcGCThreads=<span class="number">2</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">40</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line">16C24G 规格实例</span><br><span class="line">-Xmx18G -Xms18G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">10</span> -XX:ConcGCThreads=<span class="number">3</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">40</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line">24C32G 规格实例</span><br><span class="line">-Xmx26G -Xms26G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">15</span> -XX:ConcGCThreads=<span class="number">4</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">40</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line">32C56G 规格实例</span><br><span class="line">-Xmx46G -Xms46G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">20</span> -XX:ConcGCThreads=<span class="number">5</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">40</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line">64C128G 规格实例</span><br><span class="line">-Xmx104G -Xms104G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">40</span> -XX:ConcGCThreads=<span class="number">10</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">40</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4C8G 规格实例</span><br><span class="line">-Xmx6G -Xms6G -Xss512K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">4</span> -XX:ConcGCThreads=<span class="number">1</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">50</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1C2G 规格实例</span><br><span class="line">-Xmx1G -Xms1G -Xss256K -XX:MaxMetaspaceSize=320M -XX:MetaspaceSize=320M </span><br><span class="line">-XX:+UseG1GC -XX:MaxGCPauseMillis=<span class="number">100</span> -XX:ParallelGCThreads=<span class="number">1</span> -XX:ConcGCThreads=<span class="number">1</span> -XX:InitiatingHeapOccupancyPercent=<span class="number">50</span> -XX:-OmitStackTraceInFastThrow -XX:+ParallelRefProcEnabled -XX:+PrintGCDetails -XX:+PrintGCDateStamps </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">高级配置（一般不用配置）</span><br><span class="line">-XX:+PrintReferenceGC</span><br><span class="line">-XX:G1HeapRegionSize=<span class="number">8</span></span><br><span class="line">-XX:MaxTenuringThreshold=<span class="number">8</span></span><br><span class="line">-XX:+PrintTenuringDistribution</span><br><span class="line">-XX:+UnlockExperimentalVMOptions -XX:G1MaxNewSizePercent=<span class="number">50</span> </span><br></pre></td></tr></table></figure>
+
+
+
+
       
 
       
@@ -270,6 +277,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -324,7 +342,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <ol>
+<li><p>keyBy时不要传字符串，会用到TypeInformation里面的字段，最好使用方法 KeySelector&lt;T, K&gt;</p>
+<p>报错：org.apache.flink.api.common.InvalidProgramException: This type (GenericType&lt;com.pdd.abra.common.items.shterm.ShtermItem&gt;) cannot be used as key.</p>
+</li>
+<li><p> flink服务如果修改了source配置，因为checkpoint会存储source配置，所以务必不要从checkpoint启动，要不新配置会获取不到</p>
+</li>
+</ol>
+
       
 
       
@@ -332,6 +357,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">flink</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       

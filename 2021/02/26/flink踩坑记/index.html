@@ -8,14 +8,17 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>flink踩坑记 | Fight For Fun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="keyBy时不要传字符串，会用到TypeInformation里面的字段，最好使用方法 KeySelector&lt;T, K&gt; 报错：org.apache.flink.api.common.InvalidProgramException: This type (GenericType&lt;com.pdd.abra.common.items.shterm.ShtermItem&gt;)">
+<meta property="og:type" content="article">
 <meta property="og:title" content="flink踩坑记">
 <meta property="og:url" content="http://example.com/2021/02/26/flink%E8%B8%A9%E5%9D%91%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Fight For Fun">
+<meta property="og:description" content="keyBy时不要传字符串，会用到TypeInformation里面的字段，最好使用方法 KeySelector&lt;T, K&gt; 报错：org.apache.flink.api.common.InvalidProgramException: This type (GenericType&lt;com.pdd.abra.common.items.shterm.ShtermItem&gt;)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-02-26T08:13:48.000Z">
-<meta property="article:modified_time" content="2021-02-26T08:13:48.253Z">
+<meta property="article:modified_time" content="2021-03-03T12:01:38.000Z">
 <meta property="article:author" content="MiliTing">
+<meta property="article:tag" content="flink">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Fight For Fun" type="application/atom+xml">
@@ -172,7 +175,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <ol>
+<li><p>keyBy时不要传字符串，会用到TypeInformation里面的字段，最好使用方法 KeySelector&lt;T, K&gt;</p>
+<p>报错：org.apache.flink.api.common.InvalidProgramException: This type (GenericType&lt;com.pdd.abra.common.items.shterm.ShtermItem&gt;) cannot be used as key.</p>
+</li>
+<li><p> flink服务如果修改了source配置，因为checkpoint会存储source配置，所以务必不要从checkpoint启动，要不新配置会获取不到</p>
+</li>
+</ol>
+
       
 
       
@@ -201,6 +211,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">flink</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
